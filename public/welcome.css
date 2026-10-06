@@ -6,3 +6,39 @@ main{max-width:1440px;margin:auto;padding:64px clamp(24px,5vw,80px) 46px}.hero{d
 .lessons{margin-top:60px}.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:16px}.section-heading h2{font-size:18px;margin:0;font-weight:650}.section-heading>span{font-size:13px;color:var(--muted)}.lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.lesson{display:flex;align-items:center;gap:20px;padding:24px;border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:background .15s}.lesson:hover{background:var(--sage)}.lesson-number{font-size:12px;color:var(--olive);align-self:flex-start;padding-top:4px}.lesson h3{font-size:20px;margin:0 0 5px;font-weight:650}.lesson p{font-size:14px;color:var(--muted);margin:0}.arrow{margin-left:auto;font-size:25px;color:var(--olive)}footer{border-top:1px solid var(--border);padding:22px clamp(24px,5vw,80px);display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:12px}.divider{padding:0 8px;color:#afb59f}
 @media(min-width:1600px){main{padding-top:80px}}@media(max-width:900px){.hero{gap:30px}.session{padding:24px}.time{font-size:34px}.header-label{display:none}.linkedin{display:block;margin:2px 0 0}.lesson{gap:12px;padding:18px}}@media(max-width:680px){.header{min-height:90px;padding:18px 24px}.header img{width:124px}.header-link{font-size:12px}.header-link span{margin-left:5px}main{padding-top:36px}.hero{grid-template-columns:1fr;gap:36px}h1{font-size:clamp(39px,9.8vw,60px)}.lede{font-size:17px}.session{padding:26px}.time{font-size:44px}.lessons{margin-top:38px}.section-heading{align-items:flex-start;flex-direction:column;gap:4px}.lesson-grid{grid-template-columns:1fr}footer{flex-direction:column;gap:6px}.start{width:100%;justify-content:space-between}}
 .mobile-access{display:flex;align-items:center;gap:18px;margin-top:22px;padding-top:22px;border-top:1px solid #242c2533;text-decoration:none}.mobile-access img{width:180px;height:180px;flex:none;background:white;border-radius:4px}.mobile-access>span{min-width:0}.mobile-access strong{display:block;font-size:18px;line-height:1.2}.mobile-access span span{display:block;font-size:13px;line-height:1.4;margin-top:10px}.mobile-access small{display:block;overflow-wrap:anywhere;font-size:11px;margin-top:12px}.mobile-access:hover strong{text-decoration:underline}@media(min-width:681px) and (max-width:1100px){.mobile-access{flex-direction:column;align-items:flex-start}}@media(max-width:420px){.mobile-access{flex-direction:column;align-items:flex-start}.mobile-access img{width:200px;height:200px}}
+/* Desktop presentation: size spacing and type to the available screen height.
+   Keep natural overflow for browser zoom and unusually small windows. */
+@media (min-width:1024px) {
+  body{min-height:100dvh;display:grid;grid-template-rows:70px 1fr 34px}
+  .header{min-height:0;padding:8px clamp(24px,4vw,64px)}
+  .header img{width:118px}
+  main{width:100%;margin:0 auto;padding:16px clamp(24px,4vw,64px);display:grid;grid-template-rows:1fr auto;gap:16px}
+  .hero{grid-template-columns:1.2fr 1fr;gap:clamp(28px,4vw,64px)}
+  .eyebrow{margin-bottom:14px}
+  h1{font-size:clamp(38px,6.2dvh,64px)}
+  .lede{font-size:16px;line-height:1.45;margin:18px 0;max-width:570px}
+  .presenter{margin:18px 0}.avatar{width:40px;height:40px}
+  .start{padding:11px 20px;font-size:16px}
+  .session{align-self:center;padding:18px 22px;border-radius:16px}
+  .day{padding:4px 10px}.date{font-size:20px;margin:10px 0 0}
+  .time{font-size:38px;line-height:1.2;margin:2px 0 6px}
+  .journey{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px;padding-top:12px}
+  .journey>div{display:block;padding:0;position:relative}
+  .journey .step{display:inline-grid;width:22px;height:22px;margin-bottom:5px;font-size:10px}
+  .journey>div>span:last-child{position:absolute;right:4px;top:0;font-size:18px}
+  .journey p{font-size:16px}.journey small{font-size:11px;line-height:1.2;margin-top:3px}
+  .session-note{margin:10px 0 0;font-size:10px}
+  .mobile-access{flex-direction:row;align-items:center;margin-top:12px;padding-top:12px;gap:16px}
+  .mobile-access img{width:clamp(132px,18dvh,170px);height:clamp(132px,18dvh,170px)}
+  .mobile-access strong{font-size:16px}.mobile-access span span{font-size:12px;margin-top:6px}.mobile-access small{font-size:10px;margin-top:8px}
+  .lessons{margin:0}.section-heading{margin-bottom:8px}.section-heading h2{font-size:16px}
+  .lesson{padding:12px 16px;gap:14px}.lesson h3{font-size:18px;margin-bottom:2px}.lesson p{font-size:13px;line-height:1.3}
+  footer{padding:7px clamp(24px,4vw,64px);font-size:11px;align-items:center}
+}
+@media (min-width:1024px) and (max-height:740px) {
+  body{grid-template-rows:60px 1fr 30px}
+  .header img{width:104px}main{padding-block:10px;gap:10px}
+  .session{padding:14px 18px}.date{margin-top:6px}.journey{margin-top:10px;padding-top:8px}
+  .eyebrow{margin-bottom:10px}.lede{margin:12px 0}.presenter{margin:12px 0}
+  .mobile-access{margin-top:8px;padding-top:8px}.session-note{margin-top:6px}
+}
