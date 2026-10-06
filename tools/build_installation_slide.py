@@ -38,8 +38,7 @@ for kind,symbol,en,ro,sub,subro,steps,end,endro in data:
  for i,(actor,actorro,title,titlero,desc,descro,art) in enumerate(steps,1):
   rows.append(f'<li><span class="diagram-number">{i}</span><div class="step-copy"><span class="actor">{t(actor,actorro)}</span><h4>{t(title,titlero)}</h4><p>{t(desc,descro)}</p></div><div class="step-art" aria-hidden="true">{art}</div></li>')
  panels.append(f'<article class="diagram-panel {kind}"><div class="panel-heading"><span class="round-icon">{icon(symbol)}</span><div><h3>{t(en,ro)}</h3><p>{t(sub,subro)}</p></div></div><ol>{"".join(rows)}</ol><p class="change-note"><strong>{t("When local files change:","Când fișierele locale se modifică:")}</strong> {t(end,endro)}</p></article>')
-slide=f'''<div class="coded-label"><span>{t('CODE VERSION · EDITABLE TEXT & VECTOR GRAPHICS','VERSIUNE PRIN COD · TEXT EDITABIL ȘI GRAFICĂ VECTORIALĂ')}</span></div>
-<section class="coded-slide" id="coded-slide" aria-labelledby="coded-title">{defs}
+slide=f'''<section class="coded-slide" id="coded-slide" aria-labelledby="coded-title">{defs}
 <h2 id="coded-title">{t('Why install the desktop app?','De ce să instalați aplicația desktop?')}</h2>
 <p class="diagram-subtitle">{t('Both can do the work. The difference is how they access your files.','Ambele pot realiza sarcina. Diferența este modul de acces la fișiere.')}</p>
 <div class="same-task"><span class="task-files" aria-hidden="true">{file('pdf')*3}</span><p><strong>{t('Same task:','Aceeași sarcină:')}</strong> {t('compare supplier quotes and create a spreadsheet + recommendation.','comparați ofertele furnizorilor și creați un tabel comparativ + o recomandare.')}</p></div>
@@ -47,9 +46,8 @@ slide=f'''<div class="coded-label"><span>{t('CODE VERSION · EDITABLE TEXT & VEC
 <p class="diagram-benefit"><span aria-hidden="true">↗</span> {t('The benefit: less manual file handling, especially for recurring work.','Beneficiul: mai puține operațiuni manuale cu fișierele, mai ales pentru activitățile recurente.')}</p>
 <div class="diagram-notes"><span>{t('Start with copies of non-sensitive files and limited permissions.','Începeți cu copii ale unor fișiere nesensibile și cu permisiuni limitate.')}</span><span>{t('Comparison assumes browser uploads. Connected services or a desktop bridge can also extend browser access; features vary.','Comparația presupune încărcări în browser. Serviciile conectate sau o punte desktop pot extinde accesul din browser; funcțiile diferă.')}</span></div></section>'''
 p=root/'preparation/index.html';s=p.read_text(encoding='utf-8')
-s=re.sub(r'<div class="coded-label">.*?</section>', '', s, flags=re.S)
-s=re.sub(r'<div class="romanian-slide".*?</div><figcaption', '<figcaption', s, flags=re.S)
-s=s.replace('</figure>','</figure>\n'+slide,1)
+s,count=re.subn(r'<section class="coded-slide".*?</section>', lambda match: slide, s, count=1, flags=re.S)
+assert count == 1, 'Expected exactly one coded slide to update'
 if '/preparation/slide-translations.js' not in s:
  s=s.replace('<script defer src="/language-switch.js">','<script defer src="/preparation/slide-translations.js"></script><script defer src="/language-switch.js">')
 if '/preparation/coded-slide.css' not in s:
