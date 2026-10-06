@@ -1,0 +1,287 @@
+{
+  "id": "trace",
+  "route": "/trace",
+  "panels": [
+    "legend"
+  ],
+  "format": {
+    "kind": "int"
+  },
+  "chart": {
+    "type": "trace-tree",
+    "tIntro": 1.4,
+    "dModel": 0.24,
+    "dTool": 0.13,
+    "dFinal": 0.5,
+    "calloutHold": 1.5,
+    "callouts": {
+      "1": true,
+      "22": true,
+      "47": true
+    },
+    "tHold": 1.0,
+    "tInsight": 6.4,
+    "tTail": 2.6,
+    "phases": [
+      1,
+      13,
+      18,
+      23,
+      34
+    ],
+    "ctxMax": 260000,
+    "categories": {
+      "Bash": "bash",
+      "PowerShell": "bash",
+      "Read": "read",
+      "Write": "write",
+      "Edit": "write"
+    }
+  },
+  "dataUrl": "/trace/data.json",
+  "colors": {
+    "bash": "#3fd0c9",
+    "read": "#ffb547",
+    "write": "#7be0a5",
+    "browser": "#8e7cff",
+    "other": "#8ea6b6"
+  },
+  "legend": [
+    "bash",
+    "read",
+    "write",
+    "browser",
+    "other"
+  ],
+  "cta": {
+    "href": "/caching/"
+  },
+  "i18n": {
+    "fr": {
+      "docTitle": "Anatomie d'un prompt : la trace réelle d'une demande à une IA",
+      "docDesc": "Graphique interactif : chaque appel au modèle et chaque outil lancé pour une seule demande à Claude Code, avec la taille du contexte, le cache et les tokens.",
+      "kicker": "Claude Code · Trace réelle",
+      "title": "Anatomie d'un prompt",
+      "lede": "Une seule demande : reproduire une vidéo en animation par code. Voici chaque appel au modèle et chaque outil lancé, avec la taille du contexte à chaque étape. Survole la courbe pour le détail d'un appel, clique pour y aller.",
+      "callsUnit": "appels modèle",
+      "yearLabel": "appels",
+      "readyText": "Appuie sur « Lancer » pour voir la demande se dérouler : 53 appels au modèle et 71 outils en 17 minutes, ou survole la courbe.",
+      "cta": "Suite : facture et cache →",
+      "note": "Source : transcript de session Claude Code. Usage exact par appel ; tokens de résultat d'outil estimés (caractères ÷ 4, une image = 1 500).",
+      "dataLink": "Données",
+      "chartLabel": "Arbre des appels au modèle et aux outils d'une demande, avec la courbe du contexte",
+      "legend": {
+        "bash": "<strong>Bash</strong> : commandes, scripts, rendus vidéo.",
+        "read": "<strong>Read</strong> : fichiers et images. Une image pèse environ 1 500 tokens.",
+        "write": "<strong>Write / Edit</strong> : fichiers créés ou modifiés.",
+        "browser": "<strong>Navigateur</strong> : ouverture de la page et vérifications.",
+        "other": "<strong>Autres</strong> : recherche web, attente d'un rendu, chargement d'outils."
+      },
+      "callName": "Appel modèle",
+      "tok": "tok",
+      "finalName": "Réponse finale",
+      "promptName": "Demande de l'utilisateur",
+      "treeTitle": "ARBRE DE LA DEMANDE",
+      "chartTitle": "CONTEXTE PAR APPEL MODÈLE",
+      "legendRead": "cache lu",
+      "legendWrite": "cache écrit",
+      "legendOut": "sortie",
+      "tiles": [
+        "appels modèle",
+        "appels d'outils",
+        "contexte traité",
+        "lu du cache"
+      ],
+      "footer": "Tokens de résultat d'outil estimés · usage par appel exact",
+      "callouts": {
+        "1": "86 k tokens de contexte avant tout travail : prompt système, définitions d'outils et consignes du projet",
+        "22": "16,8 k tokens écrits d'un coup : le moteur de rendu",
+        "47": "215 s d'attente : le rendu de la vidéo française"
+      },
+      "tip": {
+        "ctx": "tokens de contexte",
+        "split": "sortie {out} · cache lu {cr} · cache écrit {cc}",
+        "click": "Clique pour aller à cet appel",
+        "err": "erreur"
+      },
+      "insKicker": "CE QUE LA TRACE MONTRE",
+      "insights": [
+        [
+          "{a}",
+          "tokens de contexte avant tout travail",
+          "prompt système, outils et consignes du projet"
+        ],
+        [
+          "{b} %",
+          "du contexte lu depuis le cache",
+          "{c} M sur {d} M de tokens traités"
+        ],
+        [
+          "{e}",
+          "tokens écrits par le modèle",
+          "contre {d} M de contexte relu"
+        ],
+        [
+          "{f} min",
+          "d'exécution des outils",
+          "sur {g} min : le reste, c'est la génération du modèle"
+        ]
+      ],
+      "chapters": [
+        [
+          "Ouverture",
+          "0 s",
+          "Une demande, puis chaque appel au modèle et chaque outil lancé, dans l'ordre."
+        ],
+        [
+          "Comprendre la demande",
+          "appels 1–12",
+          "Lire le projet, analyser la vidéo image par image, puis trouver les vraies données plutôt que les lire à l'œil."
+        ],
+        [
+          "Lire l'existant",
+          "appels 13–17",
+          "Relire les moteurs de rendu et les pages déjà en place pour s'y raccorder."
+        ],
+        [
+          "Écrire le moteur",
+          "appels 18–22",
+          "Script de données, drapeaux dessinés en code, puis un gros bloc de 16,8 k tokens : le moteur de rendu."
+        ],
+        [
+          "Affiner",
+          "appels 23–33",
+          "Images de contrôle, étiquettes qui se chevauchent, corrections, nouvelles vérifications."
+        ],
+        [
+          "Livrer",
+          "appels 34–53",
+          "Générer la page, lancer les rendus vidéo en arrière-plan, vérifier dans le navigateur."
+        ],
+        [
+          "Ce que la trace montre",
+          "bilan",
+          "Un contexte énorme dès le départ, presque tout lu depuis le cache, et près de la moitié du temps passée dans les outils."
+        ],
+        [
+          "Conclusion",
+          "fin",
+          "Une demande, 124 étapes. Chaque appel relit tout le contexte : le cache fait la différence."
+        ]
+      ]
+    },
+    "en": {
+      "docTitle": "Anatomy of a prompt: the real trace of one request to an AI",
+      "docDesc": "Interactive chart: every model call and every tool launched for a single Claude Code request, with context size, cache and tokens.",
+      "kicker": "Claude Code · Real trace",
+      "title": "Anatomy of a prompt",
+      "lede": "A single request: recreate a video as a coded animation. Here is every model call and every tool launched, with the context size at each step. Hover the curve for a call's details, click to jump there.",
+      "callsUnit": "model calls",
+      "yearLabel": "calls",
+      "readyText": "Press “Play” to watch the request unfold: 53 model calls and 71 tools in 17 minutes, or hover the curve.",
+      "cta": "Next lesson: Agent bill & cache →",
+      "note": "Source: Claude Code session transcript. Exact usage per call; tool result tokens are estimates (characters ÷ 4, one image = 1,500).",
+      "dataLink": "Data",
+      "chartLabel": "Tree of the model and tool calls of one request, with the context curve",
+      "legend": {
+        "bash": "<strong>Bash</strong>: commands, scripts, video renders.",
+        "read": "<strong>Read</strong>: files and images. One image weighs about 1,500 tokens.",
+        "write": "<strong>Write / Edit</strong>: files created or changed.",
+        "browser": "<strong>Browser</strong>: opening the page and checking it.",
+        "other": "<strong>Other</strong>: web search, waiting for a render, loading tools."
+      },
+      "callName": "Model call",
+      "tok": "tok",
+      "finalName": "Final response",
+      "promptName": "User prompt",
+      "treeTitle": "REQUEST TREE",
+      "chartTitle": "CONTEXT PER MODEL CALL",
+      "legendRead": "cache read",
+      "legendWrite": "cache write",
+      "legendOut": "output",
+      "tiles": [
+        "model calls",
+        "tool calls",
+        "context processed",
+        "read from cache"
+      ],
+      "footer": "Tool result tokens estimated · exact usage per call",
+      "callouts": {
+        "1": "86k tokens of context before any work: system prompt, tool definitions and project instructions",
+        "22": "16.8k tokens written in one go: the render engine",
+        "47": "215 s wait: rendering the French video"
+      },
+      "tip": {
+        "ctx": "context tokens",
+        "split": "output {out} · cache read {cr} · cache write {cc}",
+        "click": "Click to jump to this call",
+        "err": "error"
+      },
+      "insKicker": "WHAT THE TRACE SHOWS",
+      "insights": [
+        [
+          "{a}",
+          "tokens of context before any work",
+          "system prompt, tools and project instructions"
+        ],
+        [
+          "{b}%",
+          "of context read from cache",
+          "{c} M of {d} M tokens processed"
+        ],
+        [
+          "{e}",
+          "tokens written by the model",
+          "against {d} M of re-read context"
+        ],
+        [
+          "{f} min",
+          "of tool execution",
+          "out of {g} min: the rest is model generation"
+        ]
+      ],
+      "chapters": [
+        [
+          "Opening",
+          "0 s",
+          "One request, then every model call and every tool launched, in order."
+        ],
+        [
+          "Understanding the request",
+          "calls 1–12",
+          "Read the project, analyse the video frame by frame, then find the real data instead of eyeballing it."
+        ],
+        [
+          "Reading what exists",
+          "calls 13–17",
+          "Re-read the existing renderers and pages to plug into them."
+        ],
+        [
+          "Writing the engine",
+          "calls 18–22",
+          "A data script, flags drawn in code, then one big 16.8k-token block: the render engine."
+        ],
+        [
+          "Refining",
+          "calls 23–33",
+          "Check images, overlapping labels, fixes, more checks."
+        ],
+        [
+          "Shipping",
+          "calls 34–53",
+          "Generate the page, start the video renders in the background, verify in the browser."
+        ],
+        [
+          "What the trace shows",
+          "summary",
+          "A huge context from the start, almost all of it read from cache, and nearly half the time spent in tools."
+        ],
+        [
+          "Conclusion",
+          "end",
+          "One request, 124 steps. Every call re-reads the whole context: the cache makes the difference."
+        ]
+      ]
+    }
+  }
+}

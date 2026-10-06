@@ -1,0 +1,6 @@
+.vercel/
+node_modules/
+output/
+.playwright-cli/
+__pycache__/
+.env*

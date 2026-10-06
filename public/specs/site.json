@@ -1,0 +1,73 @@
+{
+  "brand": "Business Forward",
+  "tabs": [
+    {
+      "id": "trace",
+      "href": "/trace/",
+      "label": {
+        "fr": "Anatomie d'un prompt",
+        "en": "Anatomy of a prompt"
+      },
+      "short": {
+        "fr": "Trace IA",
+        "en": "AI trace"
+      }
+    },
+    {
+      "id": "caching",
+      "href": "/caching/",
+      "label": {
+        "fr": "Facture d'un agent",
+        "en": "Agent bill & cache"
+      },
+      "short": {
+        "fr": "Cache IA",
+        "en": "AI cache"
+      }
+    }
+  ],
+  "ui": {
+    "fr": {
+      "play": "Lancer",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "replay": "Rejouer",
+      "stop": "Arrêter",
+      "loop": "En boucle",
+      "badge": {
+        "playing": "LECTURE",
+        "paused": "EN PAUSE",
+        "stopped": "PRÊT",
+        "ended": "TERMINÉ"
+      },
+      "chaptersTitle": "Chapitres",
+      "scrubLabel": "Position dans l'animation",
+      "keys": "<kbd>Espace</kbd> lancer / pause · <kbd>Échap</kbd> arrêter",
+      "readyTitle": "Prêt à démarrer",
+      "end": "FIN",
+      "navLabel": "Modules de l’atelier",
+      "pickNone": "— Choisir —"
+    },
+    "en": {
+      "play": "Play",
+      "pause": "Pause",
+      "resume": "Resume",
+      "replay": "Replay",
+      "stop": "Stop",
+      "loop": "Loop",
+      "badge": {
+        "playing": "PLAYING",
+        "paused": "PAUSED",
+        "stopped": "READY",
+        "ended": "ENDED"
+      },
+      "chaptersTitle": "Chapters",
+      "scrubLabel": "Position in the animation",
+      "keys": "<kbd>Space</kbd> play / pause · <kbd>Esc</kbd> stop",
+      "readyTitle": "Ready to start",
+      "end": "END",
+      "navLabel": "Workshop lessons",
+      "pickNone": "— Choose —"
+    }
+  }
+}

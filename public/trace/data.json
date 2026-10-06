@@ -1,0 +1,1056 @@
+{
+ "wall_seconds": 1027,
+ "events": [
+  {
+   "k": "model",
+   "n": 1,
+   "ctx": 85940,
+   "out": 270,
+   "cr": 39781,
+   "cc": 46157,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: ls -la | head -50; echo ---; which ffmpeg ffprobe python node; pyt…",
+   "name": "Bash",
+   "tok": 1087,
+   "dur": 3.2,
+   "err": true
+  },
+  {
+   "k": "model",
+   "n": 2,
+   "ctx": 98112,
+   "out": 172,
+   "cr": 85938,
+   "cc": 12172,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: ls -laR animation-vieillissement .claude | head -60; python -c \"im…",
+   "name": "Bash",
+   "tok": 719,
+   "dur": 8.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 3,
+   "ctx": 100171,
+   "out": 359,
+   "cr": 98110,
+   "cc": 2059,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: cat README.md; cat vercel.json .vercelignore .gitignore ../.claude…",
+   "name": "Bash",
+   "tok": 1936,
+   "dur": 2.4,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py c=cv2.VideoCapture(\"Obesity rate over time.mp4\")",
+   "name": "Bash",
+   "tok": 21,
+   "dur": 2.7,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 4,
+   "ctx": 103884,
+   "out": 495,
+   "cr": 100169,
+   "cc": 3713,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: mkdir -p ref && python - <<py c=cv2.VideoCapture(r\"<downloads>/Obe…",
+   "name": "Bash",
+   "tok": 71,
+   "dur": 2.4,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 5,
+   "ctx": 105598,
+   "out": 547,
+   "cr": 103882,
+   "cc": 1714,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Read f000.0.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read f009.0.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read f019.0.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read f024.5.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 6,
+   "ctx": 111079,
+   "out": 1997,
+   "cr": 105596,
+   "cc": 5481,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py c=cv2.VideoCapture(r\"<downloads>/Obesity rate over t…",
+   "name": "Bash",
+   "tok": 205,
+   "dur": 4.5,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 7,
+   "ctx": 113654,
+   "out": 989,
+   "cr": 111077,
+   "cc": 2575,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py c=cv2.VideoCapture(r\"<downloads>/Obesity rate over t…",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 2.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 8,
+   "ctx": 114682,
+   "out": 539,
+   "cr": 113652,
+   "cc": 1028,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Read m0.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read m1.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read m2.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read m3.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 9,
+   "ctx": 119151,
+   "out": 2259,
+   "cr": 114680,
+   "cc": 4469,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "ToolSearch select:WebSearch,WebFetch",
+   "name": "ToolSearch",
+   "tok": 0,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 10,
+   "ctx": 122184,
+   "out": 78,
+   "cr": 119149,
+   "cc": 3033,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "WebSearch \"NCD-RisC 2026 adult obesity prevalence 1990-2\"",
+   "name": "WebSearch",
+   "tok": 752,
+   "dur": 8.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 11,
+   "ctx": 123499,
+   "out": 365,
+   "cr": 122182,
+   "cc": 1315,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: curl -sL \"https://ourworldindata.org/grapher/obesity-prevalence-ad…",
+   "name": "Bash",
+   "tok": 527,
+   "dur": 2.6,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 12,
+   "ctx": 124898,
+   "out": 400,
+   "cr": 123497,
+   "cc": 1399,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py C=[\"United States\",\"Mexico\",\"Australia\",\"Brazil\",\"Un…",
+   "name": "Bash",
+   "tok": 267,
+   "dur": 1.3,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 13,
+   "ctx": 125928,
+   "out": 261,
+   "cr": 124896,
+   "cc": 1030,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: wc -l animation/*.py index.html supplements/index.html; sed -n 1,1…",
+   "name": "Bash",
+   "tok": 1935,
+   "dur": 1.5,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 14,
+   "ctx": 129874,
+   "out": 220,
+   "cr": 125926,
+   "cc": 3946,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: sed -n 140,525p animation/supplements_render.py",
+   "name": "Bash",
+   "tok": 3994,
+   "dur": 1.5,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Bash: grep -n \"^def \\|^F_\\|^[A-Z_]* *=\" animation/render.py | head -80",
+   "name": "Bash",
+   "tok": 612,
+   "dur": 1.4,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 15,
+   "ctx": 139838,
+   "out": 5509,
+   "cr": 129872,
+   "cc": 9964,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: cat supplements/index.html",
+   "name": "Bash",
+   "tok": 553,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 16,
+   "ctx": 146446,
+   "out": 178,
+   "cr": 139836,
+   "cc": 6608,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Read bi5ik1cj2.txt",
+   "name": "Read",
+   "tok": 9940,
+   "dur": 0.5,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 17,
+   "ctx": 164782,
+   "out": 789,
+   "cr": 146444,
+   "cc": 18336,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: sed -n 145,170p animation/render.py; sed -n 185,292p animation/ren…",
+   "name": "Bash",
+   "tok": 1874,
+   "dur": 2.0,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 18,
+   "ctx": 169265,
+   "out": 1225,
+   "cr": 164780,
+   "cc": 4483,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: mkdir -p obesity/media obesity/keyframes/en && cat > animation/obe…",
+   "name": "Bash",
+   "tok": 172,
+   "dur": 2.3,
+   "err": true
+  },
+  {
+   "k": "model",
+   "n": 19,
+   "ctx": 170873,
+   "out": 213,
+   "cr": 169263,
+   "cc": 1608,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: sed -i 's/print(\"OK → \", OUT)/print(\"OK:\", OUT)/; s/print(\"OK →\", …",
+   "name": "Bash",
+   "tok": 96,
+   "dur": 2.4,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 20,
+   "ctx": 171302,
+   "out": 5185,
+   "cr": 170871,
+   "cc": 429,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Write flags.py",
+   "name": "Write",
+   "tok": 45,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 21,
+   "ctx": 176581,
+   "out": 585,
+   "cr": 171300,
+   "cc": 5279,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py s=open(\"flags.py\",encoding=\"utf8\").read()",
+   "name": "Bash",
+   "tok": 3,
+   "dur": 2.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read flags-sheet.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 22,
+   "ctx": 177815,
+   "out": 16800,
+   "cr": 176579,
+   "cc": 1234,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Write obesity_render.py",
+   "name": "Write",
+   "tok": 47,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 23,
+   "ctx": 194712,
+   "out": 517,
+   "cr": 177813,
+   "cc": 16897,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: sed -i 's/\"02-asie\": chapter_times\\[3\\] - 0.5, \"03-etats-unis\": ch…",
+   "name": "Bash",
+   "tok": 310,
+   "dur": 4.8,
+   "err": true
+  },
+  {
+   "k": "model",
+   "n": 24,
+   "ctx": 196075,
+   "out": 412,
+   "cr": 194710,
+   "cc": 1363,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: sed -i 's/width=s(3 + 4 \\* w)/width=int(round(s(3 + 4 * w)))/; s/w…",
+   "name": "Bash",
+   "tok": 20,
+   "dur": 7.9,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 25,
+   "ctx": 196561,
+   "out": 173,
+   "cr": 196073,
+   "cc": 486,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Read p12.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read p24.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.0,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 26,
+   "ctx": 202206,
+   "out": 5329,
+   "cr": 196559,
+   "cc": 5645,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 416,
+   "dur": 2.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 27,
+   "ctx": 208692,
+   "out": 549,
+   "cr": 202204,
+   "cc": 6486,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py o.set_lang(\"en\")",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 5.0,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read strip.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 4.9,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 28,
+   "ctx": 210071,
+   "out": 2170,
+   "cr": 208690,
+   "cc": 1379,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 5.5,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read strip.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 5.2,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 29,
+   "ctx": 213071,
+   "out": 2119,
+   "cr": 210069,
+   "cc": 3000,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 4.4,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read strip.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 4.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 30,
+   "ctx": 216020,
+   "out": 1073,
+   "cr": 213069,
+   "cc": 2949,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 4.5,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read strip.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 4.2,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 31,
+   "ctx": 218049,
+   "out": 563,
+   "cr": 216018,
+   "cc": 2029,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py o.set_lang(\"fr\")",
+   "name": "Bash",
+   "tok": 7,
+   "dur": 4.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Read strip2.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 4.2,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 32,
+   "ctx": 220624,
+   "out": 1958,
+   "cr": 218047,
+   "cc": 2575,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 45,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 33,
+   "ctx": 222733,
+   "out": 887,
+   "cr": 220622,
+   "cc": 2109,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"obesity_render.py\"",
+   "name": "Bash",
+   "tok": 124,
+   "dur": 1.2,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 34,
+   "ctx": 223856,
+   "out": 7127,
+   "cr": 222731,
+   "cc": 1123,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py src=open(\"supplements/index.html\",encoding=\"utf8\").r…",
+   "name": "Bash",
+   "tok": 21,
+   "dur": 1.4,
+   "err": true
+  },
+  {
+   "k": "model",
+   "n": 35,
+   "ctx": 231057,
+   "out": 7047,
+   "cr": 223854,
+   "cc": 7201,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Write make_page.py",
+   "name": "Write",
+   "tok": 59,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Write obesity_board.js",
+   "name": "Write",
+   "tok": 60,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Write obesity_head.js",
+   "name": "Write",
+   "tok": 60,
+   "dur": 0.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 36,
+   "ctx": 238618,
+   "out": 1008,
+   "cr": 231055,
+   "cc": 7561,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python \"<scratch>/make_page.py\" && python - <<py for p in (\"index.…",
+   "name": "Bash",
+   "tok": 10,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 37,
+   "ctx": 239761,
+   "out": 165,
+   "cr": 238616,
+   "cc": 1143,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: ls <tmp>/ob_en 2>/dev/null | wc -l; ls \"<site>/obesity/media\"",
+   "name": "Bash",
+   "tok": 0,
+   "dur": 2.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 38,
+   "ctx": 239956,
+   "out": 1161,
+   "cr": 239759,
+   "cc": 195,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: python - <<py p=\"README.md\"",
+   "name": "Bash",
+   "tok": 0,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 39,
+   "ctx": 241147,
+   "out": 199,
+   "cr": 239954,
+   "cc": 1191,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Monitor: Wait for EN video encode",
+   "name": "Monitor",
+   "tok": 75,
+   "dur": 1.3,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 40,
+   "ctx": 241474,
+   "out": 121,
+   "cr": 241145,
+   "cc": 327,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Monitor: noop",
+   "name": "Monitor",
+   "tok": 75,
+   "dur": 1.2,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 41,
+   "ctx": 241723,
+   "out": 78,
+   "cr": 241472,
+   "cc": 249,
+   "fresh": 2
+  },
+  {
+   "k": "final"
+  },
+  {
+   "k": "model",
+   "n": 42,
+   "ctx": 242178,
+   "out": 130,
+   "cr": 241721,
+   "cc": 453,
+   "fresh": 4
+  },
+  {
+   "k": "tool",
+   "label": "Bash: ls <tmp>/ob_en | wc -l; ls \"<site>/obesity/media\"",
+   "name": "Bash",
+   "tok": 0,
+   "dur": 1.5,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 43,
+   "ctx": 242338,
+   "out": 217,
+   "cr": 242174,
+   "cc": 162,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: until [ -f \"<site>/obesity/media/which-economy-obesity.webm\" ]; do…",
+   "name": "Bash",
+   "tok": 79,
+   "dur": 47.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 44,
+   "ctx": 243196,
+   "out": 364,
+   "cr": 242336,
+   "cc": 858,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: cd \"<site>/obesity/media\"; while pgrep -f obesity_render >/dev/nul…",
+   "name": "Bash",
+   "tok": 91,
+   "dur": 35.3,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 45,
+   "ctx": 244652,
+   "out": 419,
+   "cr": 243194,
+   "cc": 1456,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: (python obesity_render.py --lang fr --frames-dir <tmp>/ob_fr --wor…",
+   "name": "Bash",
+   "tok": 125,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Bash: cd <tmp>/ob_en && python - <<py ids=[75,135,210,290,380,520] # fra…",
+   "name": "Bash",
+   "tok": 15,
+   "dur": 1.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 46,
+   "ctx": 245479,
+   "out": 60,
+   "cr": 244650,
+   "cc": 827,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Read en_strip.png",
+   "name": "Read",
+   "tok": 1500,
+   "dur": 0.3,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 47,
+   "ctx": 247705,
+   "out": 495,
+   "cr": 245477,
+   "cc": 2226,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Bash: until [ -f \"<site>/obesity/media/quelle-economie-obesite.webm\" ]; …",
+   "name": "Bash",
+   "tok": 338,
+   "dur": 215.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 48,
+   "ctx": 249081,
+   "out": 147,
+   "cr": 247703,
+   "cc": 1376,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Browser: preview_start",
+   "name": "mcp__Claude_Browser__preview_start",
+   "tok": 97,
+   "dur": 5.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 49,
+   "ctx": 249444,
+   "out": 97,
+   "cr": 249079,
+   "cc": 363,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Browser: navigate",
+   "name": "mcp__Claude_Browser__navigate",
+   "tok": 50,
+   "dur": 1.6,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 50,
+   "ctx": 249657,
+   "out": 414,
+   "cr": 249442,
+   "cc": 213,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Browser: javascript_tool",
+   "name": "mcp__Claude_Browser__javascript_tool",
+   "tok": 135,
+   "dur": 5.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Browser: read_console_messages",
+   "name": "mcp__Claude_Browser__read_console_messages",
+   "tok": 42,
+   "dur": 5.1,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 51,
+   "ctx": 250573,
+   "out": 226,
+   "cr": 249655,
+   "cc": 916,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Browser: computer",
+   "name": "mcp__Claude_Browser__computer",
+   "tok": 1602,
+   "dur": 0.3,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 52,
+   "ctx": 251256,
+   "out": 435,
+   "cr": 250571,
+   "cc": 683,
+   "fresh": 2
+  },
+  {
+   "k": "tool",
+   "label": "Browser: preview_stop",
+   "name": "mcp__Claude_Browser__preview_stop",
+   "tok": 12,
+   "dur": 2.1,
+   "err": false
+  },
+  {
+   "k": "tool",
+   "label": "Bash: rm -rf <tmp>/ob_en <tmp>/ob_fr 2>/dev/null; git status --short",
+   "name": "Bash",
+   "tok": 36,
+   "dur": 2.8,
+   "err": false
+  },
+  {
+   "k": "model",
+   "n": 53,
+   "ctx": 251959,
+   "out": 957,
+   "cr": 251254,
+   "cc": 703,
+   "fresh": 2
+  },
+  {
+   "k": "final"
+  }
+ ]
+}

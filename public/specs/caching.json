@@ -1,0 +1,658 @@
+{
+  "id": "caching",
+  "route": "/caching",
+  "layout": "wide",
+  "panels": [
+    "legend"
+  ],
+  "format": {
+    "kind": "int"
+  },
+  "chart": {
+    "type": "token-ledger",
+    "uses": [
+      "intro-card",
+      "step-flow"
+    ],
+    "tokPerSq": 1000,
+    "beats": [
+      {
+        "id": "model",
+        "call": "A1",
+        "at": "start",
+        "dur": 4.6
+      },
+      {
+        "id": "loop",
+        "call": "A1",
+        "at": "pink",
+        "dur": 4.6
+      },
+      {
+        "id": "harness",
+        "call": "A1",
+        "at": "end",
+        "dur": 5.2
+      },
+      {
+        "id": "result",
+        "call": "A2",
+        "at": "start",
+        "dur": 4.4
+      },
+      {
+        "id": "reread",
+        "call": "A2",
+        "at": "sweep",
+        "dur": 5.6
+      },
+      {
+        "id": "answer",
+        "call": "A3",
+        "at": "end",
+        "dur": 4.6
+      },
+      {
+        "id": "request2",
+        "call": "B1",
+        "at": "sweep",
+        "dur": 5.0
+      },
+      {
+        "id": "snowball",
+        "call": "B6",
+        "at": "end",
+        "dur": 5.6
+      },
+      {
+        "id": "prices",
+        "slot": "ch4a",
+        "dur": 5.4
+      },
+      {
+        "id": "gap",
+        "slot": "ch4b",
+        "dur": 5.6
+      },
+      {
+        "id": "sys",
+        "call": "E1",
+        "at": "start",
+        "dur": 5.0
+      },
+      {
+        "id": "redo",
+        "call": "E1",
+        "at": "sweep",
+        "dur": 5.4
+      },
+      {
+        "id": "rebuilt",
+        "call": "E2",
+        "at": "sweep",
+        "dur": 4.8
+      },
+      {
+        "id": "ttl",
+        "call": "E3",
+        "at": "sweep",
+        "dur": 5.6
+      },
+      {
+        "id": "fan",
+        "slot": "ch6a",
+        "dur": 4.6
+      },
+      {
+        "id": "subs",
+        "slot": "ch6b",
+        "dur": 5.4
+      },
+      {
+        "id": "first",
+        "slot": "ch7a",
+        "dur": 5.0
+      },
+      {
+        "id": "mass",
+        "slot": "ch7b",
+        "dur": 5.4
+      },
+      {
+        "id": "rbill",
+        "slot": "ch7c",
+        "dur": 5.0
+      }
+    ],
+    "price": {
+      "in": 1,
+      "out": 5,
+      "read": 0.1,
+      "write": 1.25
+    },
+    "tIntro": 2.4,
+    "tReal": 6.0,
+    "tRealHold": 2.0,
+    "tConc": 5.5
+  },
+  "dataUrl": "/caching/data.json",
+  "colors": {
+    "input": "#3b9bff",
+    "output": "#ff3d78",
+    "cached": "#617487"
+  },
+  "legend": [
+    "input",
+    "output",
+    "cached"
+  ],
+  "cta": {
+    "href": "/trace/"
+  },
+  "i18n": {
+    "fr": {
+      "docTitle": "Anatomie de la facture d'un agent IA : le cache en entrée",
+      "docDesc": "Graphique interactif : appel après appel, ce qu'un agent IA relit et ce que le cache d'entrée change à la facture, du petit exemple à une vraie trace.",
+      "kicker": "Agents IA · Entrée en cache",
+      "title": "La facture d'un agent",
+      "lede": "Un agent IA ne répond pas une fois : il boucle. Il réfléchit, appelle un outil, lit le résultat, réfléchit encore. Chaque tour est un nouvel appel facturé, qui renvoie toute la conversation. Regarde chaque token être facturé, et pourquoi le cache rend les agents abordables. Survole un carré pour voir ce qu'il coûte.",
+      "callsUnit": "appels modèle",
+      "yearLabel": "appels",
+      "readyText": "Appuie sur « Lancer » pour suivre une petite tâche appel après appel, du premier prompt à la facture finale, ou survole les carrés.",
+      "cta": "← Retour à l’anatomie d’un prompt",
+      "note": "Illustratif : 1 carré ≈ 1 000 tokens. Prix relatifs à l'entrée neuve = 1 : sortie ×5, cache lu ×0,1, écriture du cache ×1,25 (ordres de grandeur d'une API Claude ; le coefficient de lecture varie selon le modèle). Vraie trace : page « Anatomie d'un prompt ».",
+      "dataLink": "Données",
+      "chartLabel": "Lignes de carrés, un appel au modèle par ligne : entrée neuve, sortie et entrée en cache ; courbes du coût cumulé avec et sans cache",
+      "legend": {
+        "input": "<strong>Entrée</strong> : les tokens neufs que le modèle lit (prompts, résultats d'outils). Plein tarif.",
+        "output": "<strong>Sortie</strong> : les tokens que le modèle écrit. Les plus chers (×5).",
+        "cached": "<strong>Entrée en cache</strong> : les tokens renvoyés à l'identique. Facturés environ ×0,1."
+      },
+      "beatBtn": {
+        "pause": "Pause",
+        "resume": "Reprendre",
+        "skip": "Continuer"
+      },
+      "beatKey": "Espace = pause / reprise",
+      "beats": {
+        "model": [
+          "Le modèle",
+          "Le modèle lit du texte (des tokens en entrée) et en écrit (des tokens en sortie). Il ne retient rien d'un appel à l'autre : tout ce dont il a besoin doit lui être renvoyé."
+        ],
+        "loop": [
+          "La boucle de raisonnement",
+          "Avant d'agir, le modèle réfléchit à voix haute : il planifie dans un texte qu'il s'écrit à lui-même. Ce sont des tokens de sortie (rose), eux aussi facturés."
+        ],
+        "harness": [
+          "Le harnais",
+          "Autour du modèle, il y a un programme : le harnais. Il construit chaque prompt, exécute les outils que le modèle demande et lui renvoie les résultats. C'est lui qui fait d'un modèle un agent."
+        ],
+        "result": [
+          "L'outil répond",
+          "L'outil a tourné : son résultat revient au modèle comme nouveau contexte. Personne n'a rien tapé de plus."
+        ],
+        "reread": [
+          "Un nouvel appel renvoie tout",
+          "Chaque résultat déclenche un nouvel appel facturé. Le modèle ne retient rien : tout l'appel précédent est renvoyé. Ces carrés gris sont de l'entrée en cache."
+        ],
+        "answer": [
+          "La boucle s'arrête",
+          "Plus d'outil à appeler : le modèle écrit sa réponse. Une courte demande a coûté trois appels facturés."
+        ],
+        "request2": [
+          "Même conversation, relecture plus grosse",
+          "Seconde demande dans la même conversation : tout ce qui a été dit est renvoyé, et tout est de l'entrée en cache."
+        ],
+        "snowball": [
+          "La boule de neige",
+          "Appel après appel, le gris grossit pendant que le neuf reste petit. À l'appel {calls}, {p} % de l'entrée est relue depuis le cache."
+        ],
+        "prices": [
+          "Trois prix",
+          "L'entrée neuve coûte ×{in}, la sortie ×{out}, l'entrée en cache seulement ×{read}. Un même token coûte {ratio} fois moins quand il est relu."
+        ],
+        "gap": [
+          "Deux factures",
+          "Même conversation : {n} unités sans cache, {w} avec. L'écart se creuse à chaque appel, car la part relue ne cesse de grossir."
+        ],
+        "sys": [
+          "Le début du contexte",
+          "Le prompt système est la toute première chose que le modèle lit. Retiens sa place : le cache ne fonctionne qu'à partir du début."
+        ],
+        "redo": [
+          "Une modification, tout est repayé",
+          "Modifie le prompt système et chaque token qui suit est un cache perdu : réécrit au prix plein, {tok} k tokens, +{x} unités."
+        ],
+        "rebuilt": [
+          "Le cache est reconstruit",
+          "Cet appel a réécrit le cache : le suivant le relit à bas prix. Le gris revient jusqu'au prochain changement."
+        ],
+        "ttl": [
+          "Le cache expire",
+          "Une entrée de cache vit environ 5 minutes après sa dernière utilisation. Reste silencieux plus longtemps et elle disparaît : même pénalité, sans aucune modification."
+        ],
+        "fan": [
+          "Déléguer",
+          "Pour une grosse tâche, l'agent principal confie des morceaux du travail à des sous-agents qui tournent en parallèle."
+        ],
+        "subs": [
+          "Chacun paie son propre contexte",
+          "Chaque sous-agent garde et relit son propre contexte à chaque appel : {sc} appels de plus, et la facture monte de {sx} unités."
+        ],
+        "first": [
+          "Avant tout travail",
+          "La vraie demande porte déjà {n0} k tokens de contexte : prompt système, définitions d'outils, consignes du projet."
+        ],
+        "mass": [
+          "Un mur de gris",
+          "Sur {c} appels, {rp} % des tokens d'entrée sont relus depuis le cache. L'entrée neuve (bleu) et la sortie (rose) ne sont que des filets."
+        ],
+        "rbill": [
+          "La vraie facture",
+          "{rn} unités sans cache, {rw} avec : la facture est divisée par {rr}. Même travail, même réponse."
+        ]
+      },
+      "tiles": [
+        "appels modèle",
+        "part lue du cache",
+        "facture vs sans cache"
+      ],
+      "priceNames": [
+        "entrée neuve",
+        "sortie",
+        "entrée en cache"
+      ],
+      "legendShort": [
+        "entrée",
+        "sortie",
+        "cache"
+      ],
+      "ledgerTitle": "1 carré ≈ 1 000 tokens",
+      "realTitle": "VRAIE TRACE · 1 barre = 1 appel",
+      "realFirst": "{n} k avant tout travail",
+      "realText": "Même image avec de vraies données : une demande à Claude Code, 53 appels au modèle. {p} % des tokens d'entrée viennent du cache : la facture est divisée par {r}.",
+      "curveTitle": "COÛT CUMULÉ (unités)",
+      "curveWith": "avec cache",
+      "curveWithout": "sans cache",
+      "harness": "HARNAIS",
+      "model": "Modèle",
+      "sysPrompt": "Prompt système",
+      "userPrompt": "Prompt utilisateur",
+      "reasoning": "raisonne",
+      "response": "Réponse",
+      "mainAgent": "AGENT PRINCIPAL",
+      "parallel": "3 sous-agents en parallèle : chacun relit son propre contexte",
+      "tools": {
+        "read": "lire|fichier",
+        "edit": "modifier|fichier",
+        "search": "chercher|fichiers",
+        "answer": "réponse",
+        "edited": "modifié|le prompt",
+        "back": "retour|normal",
+        "idle": "pause|5 min"
+      },
+      "seg": {
+        "sys": "prompt système",
+        "user": "prompt utilisateur",
+        "res": "résultat d'outil",
+        "think": "raisonnement",
+        "call": "appel d'outil",
+        "text": "réponse",
+        "task": "consigne du sous-agent"
+      },
+      "kind": {
+        "cache": "entrée en cache",
+        "in": "entrée neuve",
+        "out": "sortie",
+        "redo": "entrée réécrite (cache perdu)"
+      },
+      "req": {
+        "A": "Corrige le format des adresses de ce tableur",
+        "B": "Trouve les fichiers similaires et corrige aussi leurs adresses",
+        "E": "Et si le prompt système change, puis 5 minutes de silence ?",
+        "C": "Combine ces listes et produis une carte"
+      },
+      "subs": {
+        "geo": "Géocodage",
+        "map": "Fond de carte",
+        "doc": "Documentation"
+      },
+      "phase": {
+        "reread": "↻ {n} k relus · cache",
+        "new": "+{n} k neufs",
+        "written": "{n} k écrits"
+      },
+      "msg": {
+        "first": "Premier appel : +25 % pour écrire le cache. Dès le 2ᵉ appel, la relecture à ×0,1 compense.",
+        "bill": "{n} unités sans cache, {w} avec : −{s} %. L'écart se creuse à chaque appel.",
+        "edit": "Prompt système modifié : les {k} k tokens qui suivent sont réécrits au prix plein (+{x} unités).",
+        "back": "Appel suivant : le cache est reconstruit, le gris revient.",
+        "idle": "5 minutes sans appel : le cache a expiré. Même pénalité.",
+        "real": "Trace réelle : {p} % des tokens d'entrée relus depuis le cache, facture ÷ {r}."
+      },
+      "tip": {
+        "call": "Appel",
+        "what": "Si ce token changeait, les {n} tokens en cache qui le suivent ({k} k) seraient réécrits : +{x} unités.",
+        "click": "Clique pour aller à cet appel"
+      },
+      "footer": "Illustratif · 1 carré ≈ 1 000 tokens · prix relatifs",
+      "insKicker": "À RETENIR",
+      "insights": [
+        [
+          "{a}×",
+          "tokens relus pour chaque token neuf",
+          "Trace réelle : {cr} M relus depuis le cache, {nw} M de neufs."
+        ],
+        [
+          "−{s2} %",
+          "sur la facture, grâce au cache",
+          "Trace réelle : facture ÷ {r}. Petit exemple : −{s1} %."
+        ],
+        [
+          "1 token",
+          "changé au début : tout est repayé après",
+          "Prompt système, liste d'outils, horodatage… garde le début du contexte stable."
+        ]
+      ],
+      "chapters": [
+        [
+          "Ouverture",
+          "0 s",
+          "Une petite tâche : corriger le format des adresses d'un tableur. Chaque carré est un paquet d'environ 1 000 tokens."
+        ],
+        [
+          "Prompt, modèle, outils",
+          "appel 1",
+          "Le harnais envoie le prompt système et celui de l'utilisateur (bleu, entrée) au modèle. Il raisonne, puis demande à un outil de lire le fichier (rose, sortie)."
+        ],
+        [
+          "Chaque résultat relance un appel",
+          "appels 2–3",
+          "Le contenu du fichier revient comme nouveau contexte : un nouvel appel facturé démarre, sans nouvelle consigne. L'appel précédent est renvoyé en entier, en entrée en cache (gris)."
+        ],
+        [
+          "La boule de neige",
+          "appels 4–9",
+          "Deuxième demande, même conversation. Chaque appel relit tout ce qui précède : le gris grossit à chaque étape, le neuf reste petit."
+        ],
+        [
+          "La facture",
+          "prix",
+          "Une entrée en cache coûte une fraction d'une entrée neuve (ici ×0,1). Même conversation, facturée avec et sans cache : l'écart se creuse à chaque appel."
+        ],
+        [
+          "Casser le cache",
+          "appels 10–12",
+          "Le cache est un préfixe : il réutilise le début de la conversation, jusqu'au premier changement. Modifie le prompt système, ou reste silencieux 5 minutes, et tout ce qui suit est réécrit au prix plein."
+        ],
+        [
+          "Sous-agents",
+          "en parallèle",
+          "Déléguer à des sous-agents multiplie les appels : chacun garde et relit son propre contexte."
+        ],
+        [
+          "La vraie trace",
+          "53 appels",
+          "Même image avec de vraies données : une demande à Claude Code, 53 appels au modèle."
+        ],
+        [
+          "Conclusion",
+          "fin",
+          "Sans cache, la facture d'entrée d'un agent croît comme le carré de ses étapes. Le cache garde cette forme mais la divise par une dizaine, tant que le début du contexte ne bouge jamais."
+        ]
+      ]
+    },
+    "en": {
+      "docTitle": "Anatomy of an AI agent's bill: cached input",
+      "docDesc": "Interactive chart: call after call, what an AI agent re-reads and what input caching changes on the bill, from a small example to a real trace.",
+      "kicker": "AI agents · Cached input",
+      "title": "An agent's bill",
+      "lede": "An AI agent doesn't answer once: it loops. It thinks, calls a tool, reads the result, thinks again. Every turn is a new billable call that re-sends the whole conversation. Watch each token get billed, and why the cache makes agents affordable. Hover a square to see what it costs.",
+      "callsUnit": "model calls",
+      "yearLabel": "calls",
+      "readyText": "Press “Play” to follow one small task call by call, from the first prompt to the final bill, or hover the squares.",
+      "cta": "← Back to Anatomy of a prompt",
+      "note": "Illustrative: 1 square ≈ 1,000 tokens. Prices relative to fresh input = 1: output ×5, cache read ×0.1, cache write ×1.25 (orders of magnitude of a Claude API; the read multiplier varies by model). Real trace: the “Anatomy of a prompt” page.",
+      "dataLink": "Data",
+      "chartLabel": "Rows of squares, one model call per row: fresh input, output and cached input; cumulative cost curves with and without the cache",
+      "legend": {
+        "input": "<strong>Input</strong>: the fresh tokens the model reads (prompts, tool results). Full price.",
+        "output": "<strong>Output</strong>: the tokens the model writes. The priciest (×5).",
+        "cached": "<strong>Cached input</strong>: tokens re-sent unchanged. Billed at about ×0.1."
+      },
+      "beatBtn": {
+        "pause": "Pause",
+        "resume": "Resume",
+        "skip": "Continue"
+      },
+      "beatKey": "Space = pause / resume",
+      "beats": {
+        "model": [
+          "The model",
+          "The model reads text (tokens in) and writes text (tokens out). It remembers nothing between two calls: whatever it needs has to be sent to it again."
+        ],
+        "loop": [
+          "The reasoning loop",
+          "Before acting, the model thinks out loud: it plans in text it writes for itself. Those are output tokens (pink), and they are billed too."
+        ],
+        "harness": [
+          "The harness",
+          "Around the model sits a program: the harness. It builds every prompt, runs the tools the model asks for and feeds the results back. It is what turns a model into an agent."
+        ],
+        "result": [
+          "A tool answers",
+          "The tool has run: its result comes back to the model as new context. Nobody has typed anything new."
+        ],
+        "reread": [
+          "A new call re-sends everything",
+          "Each result triggers a new billable call. The model remembers nothing, so the whole previous call is sent again: these grey squares are cached input."
+        ],
+        "answer": [
+          "The loop ends",
+          "With no tool left to call, the model writes its answer. One short request took three billable calls."
+        ],
+        "request2": [
+          "Same conversation, bigger re-read",
+          "A second request in the same conversation: everything said so far is sent again, and all of it is cached input."
+        ],
+        "snowball": [
+          "The snowball",
+          "Call after call the grey part grows while the fresh part stays small. By call {calls}, {p}% of the input is re-read from the cache."
+        ],
+        "prices": [
+          "Three prices",
+          "Fresh input costs ×{in}, output ×{out}, cached input only ×{read}. The same token is {ratio} times cheaper when it is re-read."
+        ],
+        "gap": [
+          "Two bills",
+          "Same conversation: {n} units without cache, {w} with. The gap widens at every call, because the re-read part keeps growing."
+        ],
+        "sys": [
+          "The start of the context",
+          "The system prompt is the very first thing the model reads. Remember its position: the cache only works from the start."
+        ],
+        "redo": [
+          "One edit, everything re-paid",
+          "Change the system prompt and every token after it is a cache miss: re-written at full price, {tok}k tokens, +{x} units."
+        ],
+        "rebuilt": [
+          "The cache is rebuilt",
+          "That call wrote the cache again, so the next one re-reads it cheaply: the grey is back until the next change."
+        ],
+        "ttl": [
+          "The cache expires",
+          "A cache entry lives about 5 minutes after its last use. Stay silent longer and it is gone: same penalty, without any edit."
+        ],
+        "fan": [
+          "Delegating",
+          "For a big task, the main agent hands parts of the work to subagents that run in parallel."
+        ],
+        "subs": [
+          "Each one pays for its own context",
+          "Every subagent keeps and re-reads its own context at each call: {sc} more calls, and the bill climbs by {sx} units."
+        ],
+        "first": [
+          "Before any work",
+          "The real request already carries {n0}k tokens of context: system prompt, tool definitions, project instructions."
+        ],
+        "mass": [
+          "A wall of grey",
+          "Across {c} calls, {rp}% of the input tokens are re-read from the cache. Fresh input (blue) and output (pink) are slivers."
+        ],
+        "rbill": [
+          "The real bill",
+          "{rn} units without cache, {rw} with it: the bill is divided by {rr}. Same work, same answer."
+        ]
+      },
+      "tiles": [
+        "model calls",
+        "read from cache",
+        "bill vs. no cache"
+      ],
+      "priceNames": [
+        "fresh input",
+        "output",
+        "cached input"
+      ],
+      "legendShort": [
+        "input",
+        "output",
+        "cached"
+      ],
+      "ledgerTitle": "1 square ≈ 1,000 tokens",
+      "realTitle": "REAL TRACE · 1 bar = 1 call",
+      "realFirst": "{n}k before any work",
+      "realText": "Same picture with real data: one Claude Code request, 53 model calls. {p}% of the input tokens came from the cache: the bill is divided by {r}.",
+      "curveTitle": "CUMULATIVE COST (units)",
+      "curveWith": "with cache",
+      "curveWithout": "no cache",
+      "harness": "HARNESS",
+      "model": "Model",
+      "sysPrompt": "System prompt",
+      "userPrompt": "User prompt",
+      "reasoning": "reasoning",
+      "response": "Response",
+      "mainAgent": "MAIN AGENT",
+      "parallel": "3 subagents in parallel: each re-reads its own context",
+      "tools": {
+        "read": "read|file",
+        "edit": "edit|file",
+        "search": "search|files",
+        "answer": "answer",
+        "edited": "edited|prompt",
+        "back": "back|to normal",
+        "idle": "pause|5 min"
+      },
+      "seg": {
+        "sys": "system prompt",
+        "user": "user prompt",
+        "res": "tool result",
+        "think": "reasoning",
+        "call": "tool call",
+        "text": "answer",
+        "task": "subagent task"
+      },
+      "kind": {
+        "cache": "cached input",
+        "in": "fresh input",
+        "out": "output",
+        "redo": "re-written input (cache lost)"
+      },
+      "req": {
+        "A": "Fix the format of addresses in this spreadsheet",
+        "B": "Find similar files and fix their addresses too",
+        "E": "What if the system prompt changes, then 5 minutes of silence?",
+        "C": "Combine these lists and produce a map"
+      },
+      "subs": {
+        "geo": "Geocode coordinates",
+        "map": "Map template",
+        "doc": "Read documentation"
+      },
+      "phase": {
+        "reread": "↻ {n}k re-read · cached",
+        "new": "+{n}k new",
+        "written": "{n}k written"
+      },
+      "msg": {
+        "first": "First call: +25% to write the cache. From call 2, re-reading at ×0.1 pays it back.",
+        "bill": "{n} units without cache, {w} with: −{s}%. The gap widens with every call.",
+        "edit": "System prompt edited: the {k}k tokens after it are re-written at full price (+{x} units).",
+        "back": "Next call: the cache is rebuilt, the grey is back.",
+        "idle": "5 minutes with no call: the cache expired. Same penalty.",
+        "real": "Real trace: {p}% of the input tokens re-read from the cache, bill ÷ {r}."
+      },
+      "tip": {
+        "call": "Call",
+        "what": "If this token changed, the {n} cached tokens after it ({k}k) would be re-written: +{x} units.",
+        "click": "Click to jump to this call"
+      },
+      "footer": "Illustrative · 1 square ≈ 1,000 tokens · relative prices",
+      "insKicker": "TAKEAWAYS",
+      "insights": [
+        [
+          "{a}×",
+          "tokens re-read for every fresh token",
+          "Real trace: {cr} M re-read from the cache, {nw} M fresh."
+        ],
+        [
+          "−{s2}%",
+          "on the bill, thanks to the cache",
+          "Real trace: bill ÷ {r}. Small example: −{s1}%."
+        ],
+        [
+          "1 token",
+          "changed at the start: everything after is re-paid",
+          "System prompt, tool list, a timestamp… keep the start of the context stable."
+        ]
+      ],
+      "chapters": [
+        [
+          "Opening",
+          "0 s",
+          "A small task: fix the address format in a spreadsheet. Each square is a chunk of about 1,000 tokens."
+        ],
+        [
+          "Prompt, model, tools",
+          "call 1",
+          "The harness sends the system prompt and the user prompt (blue, input) to the model. It reasons, then asks a tool to read the file (pink, output)."
+        ],
+        [
+          "Every result starts a new call",
+          "calls 2–3",
+          "The file contents come back as new context: another billable call starts, with no new instruction. The whole previous call is re-sent as cached input (grey)."
+        ],
+        [
+          "The snowball",
+          "calls 4–9",
+          "A second request in the same conversation. Every call re-reads everything before it: the grey grows with each step while the fresh part stays small."
+        ],
+        [
+          "The bill",
+          "price",
+          "Cached input costs a fraction of fresh input (here ×0.1). Same conversation, billed with and without the cache: the gap widens with every call."
+        ],
+        [
+          "Breaking the cache",
+          "calls 10–12",
+          "The cache is a prefix: it reuses the start of the conversation, up to the first change. Edit the system prompt, or stay silent for 5 minutes, and everything after it is re-written at full price."
+        ],
+        [
+          "Subagents",
+          "in parallel",
+          "Delegating to subagents multiplies the calls: each one keeps and re-reads its own context."
+        ],
+        [
+          "The real thing",
+          "53 calls",
+          "Same picture with real data: one Claude Code request, 53 model calls."
+        ],
+        [
+          "Conclusion",
+          "end",
+          "Without a cache, an agent's input bill grows with the square of its steps. The cache keeps that shape but divides it by about ten, as long as the start of the context never moves."
+        ]
+      ]
+    }
+  }
+}
