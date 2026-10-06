@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your data & AI · Business Forward</title>
+<meta name="description" content="Explore how training opt-out affects your chats and history in ChatGPT, Claude and Gemini. An interactive guide for personal accounts.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/privacy/privacy.css"><link rel="stylesheet" href="/language-switch.css">
+<script defer src="/languages.js"></script><script defer src="/language-switch.js"></script><script defer src="/privacy/privacy.js"></script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header><a href="/" aria-label="Business Forward workshop home"><img src="/assets/business-forward-logo.png" alt="Business Forward" width="720" height="303"></a><a href="/preparation/" data-copy="prepare">Prepare for the workshop →</a></header>
+<main id="main">
+<div class="intro"><div><p class="eyebrow" data-copy="eyebrow">BEFORE YOU SHARE YOUR DATA</p><h1 data-copy="title">Your chats. Whose training data?</h1><p class="lede" data-copy="intro">Choose an AI service. Switch off training. See what changes — and what stays.</p></div><span class="scope" data-copy="scope">Personal accounts · Free & paid</span></div>
+<div class="tabs" role="tablist" aria-label="AI service"><button role="tab" id="tab-chatgpt" aria-controls="diagram" aria-selected="true" data-provider="chatgpt">ChatGPT</button><button role="tab" id="tab-claude" aria-controls="diagram" aria-selected="false" tabindex="-1" data-provider="claude">Claude</button><button role="tab" id="tab-gemini" aria-controls="diagram" aria-selected="false" tabindex="-1" data-provider="gemini">Gemini</button></div>
+<section id="diagram" role="tabpanel" aria-labelledby="tab-chatgpt" tabindex="0">
+<div class="diagram-heading"><div><p class="eyebrow" data-copy="personal">PERSONAL ACCOUNT SETTINGS</p><h2 id="provider-title">ChatGPT</h2><p id="default-note"></p></div><p class="simulation" data-copy="simulation">Interactive illustration only.<br>Your account settings are not changed.</p></div>
+<div class="control-row"><div><span data-copy="control">The control in your account</span><strong id="setting-name"></strong></div><button id="training-toggle" role="switch" aria-checked="true" aria-describedby="default-note"><span class="switch-track" aria-hidden="true"><span></span></span><span id="toggle-label">ON</span></button></div>
+<div class="flow" aria-live="polite" aria-atomic="true">
+<div class="input-node"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 8h32v24H22L12 40v-8H8zM15 16h18M15 23h12"/></svg><strong data-copy="newchat">Your next conversation</strong><span data-copy="answer">AI still responds to your request.</span></div>
+<div class="branch" aria-hidden="true"><span></span></div>
+<div class="outcomes"><article id="training-card"><div class="card-top"><span class="node-icon" aria-hidden="true">◎</span><span data-copy="training">MODEL TRAINING</span><b id="training-badge"></b></div><h3 id="training-title"></h3><p id="training-text"></p></article><article id="history-card"><div class="card-top"><span class="node-icon" aria-hidden="true">↺</span><span data-copy="history">NEW CHAT HISTORY</span><b id="history-badge"></b></div><h3 id="history-title"></h3><p id="history-text"></p></article></div>
+</div>
+<p id="takeaway" class="takeaway"></p>
+<div class="timeline"><article><span data-copy="past">01 / PAST CONVERSATIONS</span><p id="past-text"></p></article><article><span data-copy="retention">02 / STORAGE & EXCEPTIONS</span><p id="retention-text"></p></article><article><span data-copy="feedback">03 / FEEDBACK</span><p id="feedback-text"></p></article></div>
+<div class="settings"><p id="settings-path"></p><a id="settings-link" target="_blank" rel="noopener noreferrer" data-copy="open">Open privacy settings ↗</a></div>
+<div class="provider-sources"><span data-copy="source">Official sources:</span> <span id="provider-sources"></span></div>
+</section>
+<section class="comparison"><p class="eyebrow" data-copy="compareLabel">THE DIFFERENCE THAT MATTERS</p><h2 data-copy="compareTitle">After opting out, can you keep new chats in history?</h2><div class="table-wrap"><table><thead><tr><th data-copy="service">Service</th><th data-copy="excluded">New chats excluded from training*</th><th data-copy="saved">New chat history retained</th></tr></thead><tbody><tr><th>ChatGPT</th><td data-copy="yes">Yes</td><td data-copy="yes">Yes</td></tr><tr><th>Claude</th><td data-copy="yes">Yes</td><td data-copy="yes">Yes</td></tr><tr class="gemini-row"><th>Gemini</th><td data-copy="yes">Yes</td><td data-copy="no">No — Keep Activity is off</td></tr></tbody></table></div><p class="fine" data-copy="exceptions">*For ordinary personal-account chats; feedback and safety exceptions are described above. Turning off training does not undo completed training or automatically delete stored data.</p></section>
+<aside class="perspective"><p class="eyebrow" data-copy="opinionLabel">WORKSHOP PERSPECTIVE · SME ADOPTION</p><h2 data-copy="opinionTitle">Privacy should not cost you continuity.</h2><p data-copy="opinion">For an SME using a personal account, losing new chat history makes it harder to revisit work. In my view, coupling these controls is a poor product choice and may discourage Gemini adoption. This is a workshop interpretation, not a measured adoption finding.</p></aside>
+<section class="business"><h2 data-copy="businessTitle">Check the account, not just the subscription price.</h2><p data-copy="business">A paid personal subscription is still a personal account. Business, enterprise and eligible education workspaces have different terms. Do not apply this diagram to your organisation’s managed workspace or to an API.</p><a href="/preparation/" data-copy="prepare">Prepare for the workshop →</a></section>
+<p class="fine" data-copy="checked">Official documentation checked on 6 October 2026. Settings and policies can change; use the source links to verify your account.</p>
+<noscript>This interactive guide requires JavaScript. / Acest ghid interactiv necesită JavaScript.</noscript>
+</main><footer><span>Business Forward · Nicolas Boitout</span><a href="/" data-copy="home">← Workshop home</a></footer>
+</body></html>
