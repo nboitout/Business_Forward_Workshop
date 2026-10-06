@@ -4,7 +4,7 @@
     if (!nav) return false;
     const brand = nav.querySelector('.topnav__brand');
     brand.innerHTML = '<img src="/assets/business-forward-logo.png" alt="Business Forward" width="720" height="303">';
-    brand.setAttribute('aria-label', 'Business Forward workshop, first lesson');
+    brand.setAttribute('aria-label', 'Business Forward workshop, welcome page');
     const tools = document.createElement('div');
     tools.className = 'workshop-tools';
     tools.innerHTML = '<span>AI WORKSHOP · '+(document.querySelector('[data-tab="trace"][aria-current]') ? '01' : '02')+' / 02</span><button type="button" class="fullscreen">Fullscreen ↗</button>';

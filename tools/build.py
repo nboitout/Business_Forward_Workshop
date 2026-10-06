@@ -31,6 +31,4 @@ for topic in ('trace', 'caching'):
 {''.join('<script defer src="' + asset(script) + '"></script>' for script in scripts)}
 </body></html>'''
     (ROOT / topic / 'index.html').write_text(page, encoding='utf-8')
-    if topic == 'trace':
-        (ROOT / 'index.html').write_text(page, encoding='utf-8')
     print('Built', topic)
