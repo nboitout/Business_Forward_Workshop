@@ -6,11 +6,13 @@
       "href": "/trace/",
       "label": {
         "fr": "Anatomie d'un prompt",
-        "en": "Anatomy of a prompt"
+        "en": "Anatomy of a prompt",
+        "ro": "Anatomia unui prompt"
       },
       "short": {
         "fr": "Trace IA",
-        "en": "AI trace"
+        "en": "AI trace",
+        "ro": "Execuție IA"
       }
     },
     {
@@ -18,11 +20,13 @@
       "href": "/caching/",
       "label": {
         "fr": "Facture d'un agent",
-        "en": "Agent bill & cache"
+        "en": "Agent bill & cache",
+        "ro": "Costurile unui agent și memoria cache"
       },
       "short": {
         "fr": "Cache IA",
-        "en": "AI cache"
+        "en": "AI cache",
+        "ro": "Cache IA"
       }
     }
   ],
@@ -68,6 +72,27 @@
       "end": "END",
       "navLabel": "Workshop lessons",
       "pickNone": "— Choose —"
+    },
+    "ro": {
+      "play": "Pornire",
+      "pause": "Pauză",
+      "resume": "Reluare",
+      "replay": "Redare din nou",
+      "stop": "Oprire",
+      "loop": "Repetare",
+      "badge": {
+        "playing": "ÎN REDARE",
+        "paused": "ÎN PAUZĂ",
+        "stopped": "PREGĂTIT",
+        "ended": "ÎNCHEIAT"
+      },
+      "chaptersTitle": "Capitole",
+      "scrubLabel": "Poziția în animație",
+      "keys": "<kbd>Spațiu</kbd> pornire / pauză · <kbd>Esc</kbd> oprire",
+      "readyTitle": "Pregătit pentru pornire",
+      "end": "FINAL",
+      "navLabel": "Modulele workshopului",
+      "pickNone": "— Selectați —"
     }
   }
 }

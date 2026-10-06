@@ -282,6 +282,119 @@
           "One request, 124 steps. Every call re-reads the whole context: the cache makes the difference."
         ]
       ]
+    },
+    "ro": {
+      "docTitle": "Anatomia unui prompt: execuția reală a unei solicitări către IA",
+      "docDesc": "Grafic interactiv: fiecare apel la model și fiecare instrument utilizat pentru o singură solicitare în Claude Code, cu dimensiunea contextului, memoria cache și consumul de tokenuri.",
+      "kicker": "Claude Code · Execuție reală",
+      "title": "Anatomia unui prompt",
+      "lede": "O singură solicitare: recrearea unui videoclip sub forma unei animații generate prin cod. Urmăriți fiecare apel la model și fiecare instrument utilizat, împreună cu dimensiunea contextului la fiecare etapă. Poziționați cursorul pe curbă pentru detaliile unui apel și faceți clic pentru a accesa etapa respectivă.",
+      "callsUnit": "apeluri la model",
+      "yearLabel": "apeluri",
+      "readyText": "Apăsați „Pornire” pentru a urmări execuția solicitării: 53 de apeluri la model și 71 de apeluri de instrumente în 17 minute. Puteți consulta detaliile și poziționând cursorul pe curbă.",
+      "cta": "În continuare: costurile unui agent și memoria cache →",
+      "note": "Sursa: transcrierea unei sesiuni Claude Code. Consumul de tokenuri pentru fiecare apel este exact; numărul de tokenuri din rezultatele instrumentelor este estimat (caractere ÷ 4, o imagine = 1.500).",
+      "dataLink": "Date",
+      "chartLabel": "Arborele apelurilor la model și la instrumente pentru o singură solicitare, împreună cu evoluția contextului",
+      "legend": {
+        "bash": "<strong>Bash</strong>: comenzi, scripturi și randări video.",
+        "read": "<strong>Read</strong>: citirea fișierelor și a imaginilor. O imagine reprezintă aproximativ 1.500 de tokenuri.",
+        "write": "<strong>Write / Edit</strong>: crearea sau modificarea fișierelor.",
+        "browser": "<strong>Browser</strong>: deschiderea paginii și verificarea acesteia.",
+        "other": "<strong>Altele</strong>: căutări web, așteptarea unei randări și încărcarea instrumentelor."
+      },
+      "callName": "Apel model",
+      "tok": "tok",
+      "finalName": "Răspuns final",
+      "promptName": "Solicitarea utilizatorului",
+      "treeTitle": "ARBORELE SOLICITĂRII",
+      "chartTitle": "CONTEXT LA FIECARE APEL",
+      "legendRead": "citire cache",
+      "legendWrite": "scriere cache",
+      "legendOut": "ieșire",
+      "tiles": [
+        "apeluri model",
+        "apeluri instr.",
+        "context procesat",
+        "citit din cache"
+      ],
+      "footer": "Tokenuri din instrumente: estimări · consum pe apel: exact",
+      "callouts": {
+        "1": "86 de mii de tokenuri de context înainte de începerea activității: promptul de sistem, definițiile instrumentelor și instrucțiunile proiectului",
+        "22": "16,8 mii de tokenuri generate într-un singur apel: motorul de randare",
+        "47": "215 s de așteptare: randarea videoclipului în limba franceză"
+      },
+      "tip": {
+        "ctx": "tokenuri de context",
+        "split": "ieșire {out} · citire cache {cr} · scriere cache {cc}",
+        "click": "Faceți clic pentru a accesa acest apel",
+        "err": "eroare"
+      },
+      "insKicker": "CE EVIDENȚIAZĂ EXECUȚIA",
+      "insights": [
+        [
+          "{a}",
+          "tokenuri înainte de începere",
+          "prompt de sistem, instrumente și instrucțiuni de proiect"
+        ],
+        [
+          "{b}%",
+          "din context, citit din cache",
+          "{c} mil. din {d} mil. de tokenuri procesate"
+        ],
+        [
+          "{e}",
+          "tokenuri generate de model",
+          "față de {d} mil. de tokenuri de context recitite"
+        ],
+        [
+          "{f} min",
+          "pentru execuția instrumentelor",
+          "din {g} min; restul: generarea răspunsurilor modelului"
+        ]
+      ],
+      "chapters": [
+        [
+          "Introducere",
+          "0 s",
+          "O solicitare, urmată de fiecare apel la model și fiecare instrument utilizat, în ordinea execuției."
+        ],
+        [
+          "Înțelegerea solicitării",
+          "apelurile 1–12",
+          "Analiza proiectului și a videoclipului, cadru cu cadru, apoi identificarea datelor reale, fără estimări vizuale."
+        ],
+        [
+          "Analiza componentelor existente",
+          "apelurile 13–17",
+          "Revizuirea motoarelor de randare și a paginilor existente, pentru integrarea noii animații."
+        ],
+        [
+          "Dezvoltarea motorului",
+          "apelurile 18–22",
+          "Un script pentru date, steaguri desenate prin cod, apoi un bloc de 16,8 mii de tokenuri: motorul de randare."
+        ],
+        [
+          "Ajustări și verificări",
+          "apelurile 23–33",
+          "Verificarea imaginilor, identificarea etichetelor suprapuse, corecții și verificări suplimentare."
+        ],
+        [
+          "Livrarea rezultatului",
+          "apelurile 34–53",
+          "Generarea paginii, lansarea randărilor video în fundal și verificarea în browser."
+        ],
+        [
+          "Ce evidențiază execuția",
+          "sinteză",
+          "Un context foarte mare încă de la început, citit aproape integral din cache, și aproape jumătate din timp alocat instrumentelor."
+        ],
+        [
+          "Concluzie",
+          "final",
+          "O solicitare, 124 de etape. Fiecare apel recitește întregul context: memoria cache face diferența."
+        ]
+      ]
     }
   }
 }

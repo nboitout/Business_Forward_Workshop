@@ -139,8 +139,8 @@
         if (!h) { host.hideTip(); return; }
         const q = h.cl.sq[h.i], after = q.kind === "cache" || q.kind === "redo" ? h.cl.g - 1 - h.i : 0, extra = after * (PR.write - PR.read);
         const price = { cache: PR.read, in: PR.write, redo: PR.write, out: PR.out }[q.kind];
-        host.showTip(`<b>${L.tip.call} #${calls.indexOf(h.cl) + 1} · ${L.seg[q.seg]}</b><div class="dim">${L.kind[q.kind]} · ×${String(price).replace(".", ctx.lang().code === "fr" ? "," : ".")}</div>` +
-          (q.kind === "cache" ? `<div class="dim">${U.tpl(L.tip.what, { n: after, k: after * TOK / 1000, x: extra.toFixed(1).replace(".", ctx.lang().code === "fr" ? "," : ".") })}</div>` : "") +
+        host.showTip(`<b>${L.tip.call} #${calls.indexOf(h.cl) + 1} · ${L.seg[q.seg]}</b><div class="dim">${L.kind[q.kind]} · ×${String(price).replace(".", ["fr", "ro"].includes(ctx.lang().code) ? "," : ".")}</div>` +
+          (q.kind === "cache" ? `<div class="dim">${U.tpl(L.tip.what, { n: after, k: after * TOK / 1000, x: extra.toFixed(1).replace(".", ["fr", "ro"].includes(ctx.lang().code) ? "," : ".") })}</div>` : "") +
           `<div class="dim">${L.tip.click}</div>`, px, py);
       };
       host.onClick = () => { if (!beatAt(t) && hov) ctx.seek(hov.cl.T0 + 0.02); };
@@ -173,7 +173,7 @@
 
       // ───────────── dessin : tuiles ─────────────
       function tiles(c, al, st, rs, real, L, code) {
-        const { W } = dim(), { pad, tileH, tileY, small } = lay, gap = 6, tw = (W - 2 * pad - 2 * gap) / 3, dec = code === "fr" ? "," : ".";
+        const { W } = dim(), { pad, tileH, tileY, small } = lay, gap = 6, tw = (W - 2 * pad - 2 * gap) / 3, dec = ["fr", "ro"].includes(code) ? "," : ".";
         const n = real ? Math.round(rs.f) : st.calls, cached = real ? rs.share : (st.tcache + st.tin ? st.tcache / (st.tcache + st.tin) : 0), cw = real ? rs.cw : st.cw, cn = real ? rs.cn : st.cn;
         const sav = cn > 0 ? 1 - cw / cn : 0, savTxt = (sav >= 0 ? "−" : "+") + Math.abs(Math.round(sav * 100)) + (code === "fr" ? " %" : "%");
         const vals = [[String(n), TEXT, L.tiles[0]], [Math.round(cached * 100) + (code === "fr" ? " %" : "%"), [150, 168, 186], L.tiles[1]], [cn > 0 ? savTxt : "–", sav >= 0 ? ACCENT : CORAL, L.tiles[2]]];
@@ -250,12 +250,12 @@
 
       // ───────────── dessin : bandeau des prix + message ─────────────
       function message(tt, code) {
-        if (tt >= marks.ch7) return ["real", { p: Math.round(R.cr[NR - 1] / R.ctx[NR - 1] * 100), r: (R.n[NR - 1] / R.w[NR - 1]).toFixed(1).replace(".", code === "fr" ? "," : ".") }];
+        if (tt >= marks.ch7) return ["real", { p: Math.round(R.cr[NR - 1] / R.ctx[NR - 1] * 100), r: (R.n[NR - 1] / R.w[NR - 1]).toFixed(1).replace(".", ["fr", "ro"].includes(code) ? "," : ".") }];
         if (tt >= marks.ch5) { const e2 = byId.E2.T0, e3 = byId.E3.T0; return tt < e2 ? ["edit", { k: byId.E1.g * TOK / 1000, x: (byId.E1.g * (PR.write - PR.read)).toFixed(0) }] : tt < e3 ? ["back", {}] : ["idle", {}]; }
         return tt < ch4.flip ? ["first", {}] : ["bill", { n: Math.round(bill.n), w: Math.round(bill.w), s: Math.round(toySave * 100) }];
       }
       function prices(c, tt, al, L, code) {
-        const { W } = dim(), S = lay.top, { pad, small } = lay, dec = code === "fr" ? "," : ".", gap = 6, cw = (W - 2 * pad - 2 * gap) / 3, chH = small ? 38 : 48;
+        const { W } = dim(), S = lay.top, { pad, small } = lay, dec = ["fr", "ro"].includes(code) ? "," : ".", gap = 6, cw = (W - 2 * pad - 2 * gap) / 3, chH = small ? 38 : 48;
         c.globalAlpha = al; TG.chips = { x: pad - 4, y: S.y, w: W - 2 * pad + 8, h: chH + 8 };
         [["in", PR.in, L.priceNames[0]], ["out", PR.out, L.priceNames[1]], ["cache", PR.read, L.priceNames[2]]].forEach(([k, v, name], i) => { const x = pad + i * (cw + gap), y = S.y + 4;
           c.fillStyle = rgb(CL[k], 0.12); c.strokeStyle = rgb(CL[k], 0.6); c.lineWidth = 1; rr(c, x, y, cw, chH, 9); c.fill(); c.stroke();
@@ -306,7 +306,7 @@
           cl.sq.forEach((q, j) => drawSquare(c, q, x0 + j * s, y, s, cl.ts[j], tt, isH && hov.i === j, isH && hov.i < j && (q.kind === "cache" || q.kind === "redo")));
           const head = cl.g ? clamp01(tauOf(cl, tt) / Math.max(0.01, cl.ph.a)) : 1;
           if (cl.g && head > 0 && head < 1) { const hx = x0 + cl.g * s * head; c.fillStyle = rgb([255, 255, 255], 0.9); c.fillRect(hx - 1, y - s / 2 - 2, 2, s + 4); }
-          if (!small && gutR) { const done = clamp01(tauOf(cl, tt) / cl.Hc), v = cl.costW * easeOut(done * 1.15); c.textAlign = "right"; c.font = `500 ${fs - 2}px ${MONO}`; c.fillStyle = rgb(cl.miss ? CORAL : ACCENT, 0.9 * a); c.fillText("+" + (v >= 10 ? Math.round(v) : v.toFixed(1)).toString().replace(".", ctx.lang().code === "fr" ? "," : "."), W - pad, y); }
+          if (!small && gutR) { const done = clamp01(tauOf(cl, tt) / cl.Hc), v = cl.costW * easeOut(done * 1.15); c.textAlign = "right"; c.font = `500 ${fs - 2}px ${MONO}`; c.fillStyle = rgb(cl.miss ? CORAL : ACCENT, 0.9 * a); c.fillText("+" + (v >= 10 ? Math.round(v) : v.toFixed(1)).toString().replace(".", ["fr", "ro"].includes(ctx.lang().code) ? "," : "."), W - pad, y); }
         });
         c.globalAlpha = 1;
       }
@@ -355,7 +355,7 @@
           c.fillStyle = rgb(ACCENT, 0.16); c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(X(p[0]), Y(p[2])) : c.moveTo(X(p[0]), Y(p[2])))); for (let i = pts.length - 1; i >= 0; i--) c.lineTo(X(pts[i][0]), Y(pts[i][1])); c.closePath(); c.fill();
           c.lineJoin = "round"; c.lineWidth = 2; c.strokeStyle = rgb(CORAL, 1); c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(X(p[0]), Y(p[2])) : c.moveTo(X(p[0]), Y(p[2])))); c.stroke();
           c.lineWidth = 2.6; c.strokeStyle = rgb(ACCENT, 1); c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(X(p[0]), Y(p[1])) : c.moveTo(X(p[0]), Y(p[1])))); c.stroke();
-          const num = (v) => { const r = v >= 1e4 ? Math.round(v / 1000) + " k" : Math.round(v).toLocaleString(code === "fr" ? "fr-FR" : "en-US").replace(/ /g, " "); return ser.big ? (v / 1e6).toFixed(1).replace(".", code === "fr" ? "," : ".") + " M" : r; };
+          const num = (v) => { const r = v >= 1e4 ? Math.round(v / 1000) + " k" : Math.round(v).toLocaleString(code === "ro" ? "ro-RO" : code === "fr" ? "fr-FR" : "en-US").replace(/ /g, " "); return ser.big ? (v / 1e6).toFixed(1).replace(".", ["fr", "ro"].includes(code) ? "," : ".") + " M" : r; };
           c.textAlign = "left"; c.font = `700 ${fs - 0.5}px ${MONO}`; c.fillStyle = rgb(CORAL, 1); c.fillText(num(last[2]), X(last[0]) + 6, Y(last[2]) - 3); c.fillStyle = rgb(ACCENT, 1); c.fillText(num(last[1]), X(last[0]) + 6, Y(last[1]) + 4);
         }
         c.font = `500 ${fs - 2.5}px ${MONO}`; c.fillStyle = rgb(MUTED, 0.8); c.textAlign = "left"; c.fillText("#1", px0, py1 + 11); c.textAlign = "right"; c.fillText("#" + Math.round(xmax), px1, py1 + 11); c.globalAlpha = 1;
@@ -371,7 +371,7 @@
 
       // ───────────── conclusion ─────────────
       function conclusion(c, tt, L, code) {
-        const { W, H } = dim(), ti = tt - marks.ch8, k = easeOut(ti / 0.6), dec = code === "fr" ? "," : ".", f1 = (v) => v.toFixed(1).replace(".", dec);
+        const { W, H } = dim(), ti = tt - marks.ch8, k = easeOut(ti / 0.6), dec = ["fr", "ro"].includes(code) ? "," : ".", f1 = (v) => v.toFixed(1).replace(".", dec);
         const v = { a: Math.round(R.cr[NR - 1] / realIn), cr: f1(R.cr[NR - 1] / 1e6), nw: f1(realIn / 1e6), s1: Math.round(toySave * 100), s2: Math.round(realSave * 100), r: f1(R.n[NR - 1] / R.w[NR - 1]) };
         c.globalAlpha = k; c.fillStyle = rgb(BGTOP, 1); c.fillRect(0, 0, W, H); c.textAlign = "left"; c.textBaseline = "middle";
         c.font = `600 ${lay.small ? 11 : 13}px ${SANS}`; c.fillStyle = rgb(ACCENT, 1); c.fillText(L.insKicker, 16, 30 + (1 - k) * 10);
@@ -398,7 +398,7 @@
       const bvCache = {};
       function bvars(code) {   // chiffres cités par les légendes : tous calculés à partir des données
         if (bvCache[code]) return bvCache[code];
-        const dec = code === "fr" ? "," : ".", f1 = (v) => v.toFixed(1).replace(".", dec), M = (v) => f1(v / 1e6) + " M", B6 = byId.B6, st = stateAt(B6.T0 + B6.H + 0.01), E1 = byId.E1;
+        const dec = ["fr", "ro"].includes(code) ? "," : ".", f1 = (v) => v.toFixed(1).replace(".", dec), M = (v) => f1(v / 1e6) + " M", B6 = byId.B6, st = stateAt(B6.T0 + B6.H + 0.01), E1 = byId.E1;
         memo.t = null;
         return (bvCache[code] = { calls: toyMain.length, p: Math.round(100 * st.tcache / (st.tcache + st.tin)), n: Math.round(bill.n), w: Math.round(bill.w), in: PR.in, out: PR.out, read: String(PR.read).replace(".", dec), ratio: Math.round(PR.in / PR.read),
           tok: E1.g * TOK / 1000, x: (E1.g * (PR.write - PR.read)).toFixed(0), sc: nSub, sx: Math.round(calls.slice(nMain).reduce((a, c) => a + c.costW, 0)),
@@ -475,7 +475,7 @@
         readout(tt) {
           const real = inReal(tt), n = real ? Math.round(realCount(tt)) : stateAt(tt).calls, ch = chapterAt(tt), { L, code } = ctx.lang(); let text;
           const bt = beatAt(tt); if (bt) text = beatText(bt.id)[1];
-          if (ch === 7 && real && !bt) { const rs = realState(tt); text = U.tpl(L.realText, { p: Math.round(rs.share * 100), r: (rs.cw ? rs.cn / rs.cw : 1).toFixed(1).replace(".", code === "fr" ? "," : ".") }); }
+          if (ch === 7 && real && !bt) { const rs = realState(tt); text = U.tpl(L.realText, { p: Math.round(rs.share * 100), r: (rs.cw ? rs.cn / rs.cw : 1).toFixed(1).replace(".", ["fr", "ro"].includes(code) ? "," : ".") }); }
           return { value: n, unit: "callsUnit", chapter: ch, text };
         },
         nowLabel(tt) { return mmss(tt); },

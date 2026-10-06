@@ -10,10 +10,11 @@
   "use strict";
   const E = window.Engine;
   const TXT = {
+    ro: { pick: "Cum doriți să urmăriți prezentarea?", auto: "Redare continuă", step: "Pas cu pas", start: "Pornire", back: "Înapoi", next: "Înainte", restart: "Reluare de la început", keys: "tastele ← →", stepOf: "Pasul {n} / {N}", intro: "Introducere" },
     en: { pick: "How do you want to follow it?", auto: "Continuous", step: "Step by step", start: "Start", back: "Back", next: "Next", restart: "Start over", keys: "← → keys", stepOf: "Step {n} / {N}", intro: "Introduction" },
     fr: { pick: "Comment veux-tu la suivre ?", auto: "En continu", step: "Pas à pas", start: "Commencer", back: "Précédent", next: "Suivant", restart: "Recommencer", keys: "touches ← →", stepOf: "Étape {n} / {N}", intro: "Introduction" },
   };
-  const lang = () => (document.documentElement.lang === "fr" ? "fr" : "en");
+  const lang = () => Object.hasOwn(TXT, document.documentElement.lang) ? document.documentElement.lang : "en";
   const tr = (k, v) => String(TXT[lang()][k] || k).replace(/\{(\w+)\}/g, (m, x) => (v && v[x] !== undefined ? v[x] : ""));
   const flow = (E.flow = { mode: "auto", index: -1, total: 0, t: tr, next, back, set });
   let P = null, chart = null, stops = [], lastT = 0, sig = "", pickEl = null, barEl = null;

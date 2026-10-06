@@ -63,7 +63,7 @@
         const c = host.ctx, { W, H } = host, { L, fmt, code } = ctx.lang(), j = cur(t), a = easeOut(t / P.tIntro), { fs, row, tileH, tileY, treeTop, treeBot } = lay;
         host.begin(); c.textBaseline = "middle";
         // compteurs
-        const cm = j >= 0 ? cum[j] : { calls: 0, tools: 0, cx: 0, cr: 0 }, hit = cm.cx ? cm.cr / cm.cx : 0, dec = code === "fr" ? "," : ".";
+        const cm = j >= 0 ? cum[j] : { calls: 0, tools: 0, cx: 0, cr: 0 }, hit = cm.cx ? cm.cr / cm.cx : 0, dec = ["fr", "ro"].includes(code) ? "," : ".";
         const tiles = [[String(cm.calls), ACCENT, L.tiles[0]], [String(cm.tools), TEXT, L.tiles[1]], [(cm.cx / 1e6).toFixed(2).replace(".", dec) + " M", TEXT, L.tiles[2]], [Math.round(hit * 100) + (code === "fr" ? " %" : "%"), ACCENT, L.tiles[3]]];
         const gap = 6, tw = (W - 20 - 3 * gap) / 4;
         tiles.forEach(([v, col, lab], i) => { const x = 10 + i * (tw + gap); c.fillStyle = rgb([255, 255, 255], 0.05 * a); c.strokeStyle = rgb([255, 255, 255], 0.09 * a); c.lineWidth = 1; rr(c, x, tileY, tw, tileH - 6, 10); c.fill(); c.stroke();
@@ -81,7 +81,7 @@
             if (hov) { c.fillStyle = rgb([255, 255, 255], 0.07); rr(c, 6, y - row / 2 + 1, W - 12, row - 2, 6); c.fill(); }
             c.font = `${e.k === "model" ? 600 : 400} ${fs}px ${MONO}`;
             if (e.k === "model") { c.textAlign = "left"; c.fillStyle = rgb(ACCENT, al); c.fillText(`├─ ${L.callName} #${e.n}`, 12, y); c.textAlign = "right"; c.font = `400 ${fs - 1.5}px ${MONO}`; c.fillStyle = rgb(MUTED, al);
-              c.fillText(`ctx ${fmt(e.ctx)} · out ${fmt(e.out)}`, W - 12, y); }
+              c.fillText(`ctx ${fmt(e.ctx)} · ${code === "ro" ? "ieș" : "out"} ${fmt(e.out)}`, W - 12, y); }
             else if (e.k === "tool") { c.textAlign = "right"; c.font = `400 ${fs - 1.5}px ${MONO}`; const tk = `${fmt(e.tok)} ${L.tok}`, tkw = c.measureText(tk).width; c.fillStyle = rgb(AMBER, al); c.fillText(tk, W - 12, y);
               c.textAlign = "left"; c.font = `400 ${fs - 1}px ${MONO}`; c.fillStyle = rgb(e.err ? CORAL : TEXT, al * 0.92); c.fillText(fitText(c, "├─ " + e.label, W - 40 - tkw - 18), 26, y); }
             else { c.textAlign = "left"; c.fillStyle = rgb(AMBER, al); c.fillText(`└─ ${L.finalName}`, 12, y); }
@@ -105,7 +105,7 @@
 
       function chart(c, j, a, L, fmt) {
         const { W, H } = host, { cx0, cx1, cTop, cBase, fs } = lay;
-        c.textAlign = "left"; c.font = `600 ${fs - 2}px ${SANS}`; c.fillStyle = rgb(MUTED, a); c.fillText(L.chartTitle, 12, cTop - 22);
+        c.textAlign = "left"; c.font = `600 ${fs - 2}px ${SANS}`; c.fillStyle = rgb(MUTED, a); c.fillText(L.chartTitle, 12, cTop - 40);
         let lx = W - 12; c.textAlign = "right"; c.font = `400 ${fs - 2}px ${SANS}`;
         [[L.legendOut, VIOLET], [L.legendWrite, AMBER], [L.legendRead, ACCENT]].forEach(([lab, col]) => { c.fillStyle = rgb(MUTED, a); c.fillText(lab, lx, cTop - 22); const w = c.measureText(lab).width; c.fillStyle = rgb(col, a); c.beginPath(); c.arc(lx - w - 8, cTop - 22, 3.5, 0, 7); c.fill(); lx -= w + 22; });
         [0, 100000, 200000].forEach((v) => { const y = cyp(v); c.strokeStyle = rgb([255, 255, 255], (v ? 0.07 : 0.25) * a); c.lineWidth = 1; c.beginPath(); c.moveTo(cx0, y + .5); c.lineTo(cx1, y + .5); c.stroke();

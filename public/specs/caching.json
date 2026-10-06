@@ -653,6 +653,258 @@
           "Without a cache, an agent's input bill grows with the square of its steps. The cache keeps that shape but divides it by about ten, as long as the start of the context never moves."
         ]
       ]
+    },
+    "ro": {
+      "docTitle": "Structura costurilor unui agent IA: datele de intrare din cache",
+      "docDesc": "Grafic interactiv: ce recitește un agent IA la fiecare apel și cum influențează memoria cache costurile, de la un exemplu simplu la o execuție reală.",
+      "kicker": "Agenți IA · Date de intrare din cache",
+      "title": "Costurile unui agent IA",
+      "lede": "Un agent IA lucrează în cicluri: analizează, apelează un instrument, citește rezultatul și reia analiza. Fiecare ciclu presupune un nou apel facturabil, care retransmite întreaga conversație. Urmăriți cum este facturat fiecare token și cum contribuie memoria cache la reducerea costurilor. Poziționați cursorul pe un pătrat pentru a vedea costul asociat.",
+      "callsUnit": "apeluri la model",
+      "yearLabel": "apeluri",
+      "readyText": "Apăsați „Pornire” pentru a urmări o sarcină simplă, apel cu apel, de la prima instrucțiune până la costul final, sau poziționați cursorul pe pătrate.",
+      "cta": "← Înapoi la anatomia unui prompt",
+      "note": "Exemplu ilustrativ: 1 pătrat ≈ 1.000 de tokenuri. Tarife raportate la datele de intrare noi = 1: ieșire ×5, citire din cache ×0,1, scriere în cache ×1,25 (ordine de mărime pentru un API Claude; multiplicatorul de citire variază în funcție de model). Execuție reală: pagina „Anatomia unui prompt”.",
+      "dataLink": "Date",
+      "chartLabel": "Rânduri de pătrate, câte un apel la model pe rând: date de intrare noi, date de ieșire și date de intrare din cache; curbele costului cumulat cu și fără cache",
+      "legend": {
+        "input": "<strong>Intrare</strong>: tokenurile noi citite de model (instrucțiuni, rezultate ale instrumentelor). Tarif integral.",
+        "output": "<strong>Ieșire</strong>: tokenurile generate de model. Cele mai costisitoare (×5).",
+        "cached": "<strong>Intrare din cache</strong>: tokenuri retransmise fără modificări. Facturate la aproximativ ×0,1."
+      },
+      "beatBtn": {
+        "pause": "Pauză",
+        "resume": "Reluare",
+        "skip": "Continuare"
+      },
+      "beatKey": "Spațiu = pauză / reluare",
+      "beats": {
+        "model": [
+          "Modelul",
+          "Modelul citește text (tokenuri de intrare) și generează text (tokenuri de ieșire). Nu păstrează informațiile între două apeluri: toate datele necesare trebuie retransmise."
+        ],
+        "loop": [
+          "Ciclul de raționament",
+          "Înainte de a acționa, modelul își formulează planul sub formă de text. Aceste tokenuri de ieșire (roz) sunt, de asemenea, facturate."
+        ],
+        "harness": [
+          "Sistemul de orchestrare",
+          "Modelul este coordonat de un program: sistemul de orchestrare. Acesta construiește fiecare prompt, execută instrumentele solicitate de model și îi transmite rezultatele. Astfel, modelul devine un agent."
+        ],
+        "result": [
+          "Rezultatul instrumentului",
+          "Instrumentul și-a încheiat execuția, iar rezultatul revine la model ca informație nouă de context. Utilizatorul nu a introdus nimic în plus."
+        ],
+        "reread": [
+          "Un nou apel retransmite totul",
+          "Fiecare rezultat declanșează un nou apel facturabil. Modelul nu păstrează informațiile, astfel că întregul apel anterior este retransmis. Pătratele gri reprezintă datele de intrare din cache."
+        ],
+        "answer": [
+          "Ciclul se încheie",
+          "Când nu mai are instrumente de apelat, modelul generează răspunsul. O solicitare scurtă a necesitat trei apeluri facturabile."
+        ],
+        "request2": [
+          "Aceeași conversație, mai multe date recitite",
+          "La a doua solicitare din aceeași conversație, tot conținutul anterior este retransmis ca date de intrare din cache."
+        ],
+        "snowball": [
+          "Efectul cumulativ",
+          "La fiecare apel, partea gri crește, în timp ce volumul de date noi rămâne redus. La apelul {calls}, {p}% din datele de intrare sunt recitite din cache."
+        ],
+        "prices": [
+          "Trei tarife",
+          "Datele de intrare noi costă ×{in}, datele de ieșire ×{out}, iar intrarea din cache doar ×{read}. La recitire, costul aceluiași token este de {ratio} ori mai mic."
+        ],
+        "gap": [
+          "Două variante de cost",
+          "Aceeași conversație: {n} unități fără cache, {w} cu cache. Diferența crește la fiecare apel, deoarece volumul de date recitite continuă să crească."
+        ],
+        "sys": [
+          "Începutul contextului",
+          "Promptul de sistem este primul element citit de model. Poziția sa este esențială: reutilizarea din cache începe întotdeauna de la începutul contextului."
+        ],
+        "redo": [
+          "O modificare, o nouă facturare",
+          "Dacă modificați promptul de sistem, niciun token ulterior nu mai poate fi reutilizat din cache. Se rescriu la tarif integral {tok} mii de tokenuri: +{x} unități."
+        ],
+        "rebuilt": [
+          "Memoria cache este refăcută",
+          "Apelul a rescris memoria cache, astfel că următorul apel o recitește la tarif redus. Partea gri reapare până la următoarea modificare."
+        ],
+        "ttl": [
+          "Memoria cache expiră",
+          "O intrare în cache rămâne disponibilă aproximativ 5 minute de la ultima utilizare. După o pauză mai lungă, aceasta dispare: același cost suplimentar, fără nicio modificare."
+        ],
+        "fan": [
+          "Delegarea sarcinilor",
+          "Pentru o sarcină complexă, agentul principal distribuie părți din activitate unor subagenți care lucrează în paralel."
+        ],
+        "subs": [
+          "Fiecare subagent are propriul cost de context",
+          "Fiecare subagent păstrează și recitește propriul context la fiecare apel: încă {sc} apeluri, iar costul crește cu {sx} unități."
+        ],
+        "first": [
+          "Înainte de începerea activității",
+          "Solicitarea reală include deja {n0} mii de tokenuri de context: promptul de sistem, definițiile instrumentelor și instrucțiunile proiectului."
+        ],
+        "mass": [
+          "Predomină datele din cache",
+          "Pe parcursul a {c} apeluri, {rp}% din tokenurile de intrare sunt recitite din cache. Datele de intrare noi (albastru) și cele de ieșire (roz) reprezintă doar o mică parte."
+        ],
+        "rbill": [
+          "Costul execuției reale",
+          "{rn} unități fără cache, {rw} cu cache: costul este de {rr} ori mai mic. Aceeași activitate, același răspuns."
+        ]
+      },
+      "tiles": [
+        "apeluri la model",
+        "citite din cache",
+        "cost vs. fără cache"
+      ],
+      "priceNames": [
+        "intrare nouă",
+        "ieșire",
+        "intrare din cache"
+      ],
+      "legendShort": [
+        "intrare",
+        "ieșire",
+        "cache"
+      ],
+      "ledgerTitle": "1 pătrat ≈ 1.000 de tokenuri",
+      "realTitle": "EXECUȚIE REALĂ · 1 bară = 1 apel",
+      "realFirst": "{n} mii înainte de începere",
+      "realText": "Același mecanism, pe date reale: o solicitare în Claude Code, 53 de apeluri la model. {p}% din tokenurile de intrare provin din cache: costul este de {r} ori mai mic.",
+      "curveTitle": "COST CUMULAT (unități)",
+      "curveWith": "cu cache",
+      "curveWithout": "fără cache",
+      "harness": "ORCHESTRARE",
+      "model": "Model",
+      "sysPrompt": "Prompt de sistem",
+      "userPrompt": "Prompt utilizator",
+      "reasoning": "raționament",
+      "response": "Răspuns",
+      "mainAgent": "AGENT PRINCIPAL",
+      "parallel": "3 subagenți în paralel: fiecare își recitește propriul context",
+      "tools": {
+        "read": "citire|fișier",
+        "edit": "editare|fișier",
+        "search": "căutare|fișiere",
+        "answer": "răspuns",
+        "edited": "prompt|modificat",
+        "back": "revenire|la normal",
+        "idle": "pauză|5 min"
+      },
+      "seg": {
+        "sys": "prompt de sistem",
+        "user": "prompt utilizator",
+        "res": "rezultatul instrumentului",
+        "think": "raționament",
+        "call": "apel de instrument",
+        "text": "răspuns",
+        "task": "sarcina subagentului"
+      },
+      "kind": {
+        "cache": "intrare din cache",
+        "in": "intrare nouă",
+        "out": "ieșire",
+        "redo": "intrare rescrisă (cache invalidat)"
+      },
+      "req": {
+        "A": "Corectați formatul adreselor din acest tabel",
+        "B": "Identificați fișierele similare și corectați și adresele din acestea",
+        "E": "Ce se întâmplă dacă se modifică promptul de sistem, apoi urmează o pauză de 5 minute?",
+        "C": "Combinați aceste liste și generați o hartă"
+      },
+      "subs": {
+        "geo": "Geocodificare",
+        "map": "Șablon de hartă",
+        "doc": "Documentație"
+      },
+      "phase": {
+        "reread": "↻ {n} mii recitite · cache",
+        "new": "+{n} mii noi",
+        "written": "{n} mii generate"
+      },
+      "msg": {
+        "first": "Primul apel: +25% pentru scrierea în cache. De la al doilea apel, recitirea la ×0,1 compensează acest cost.",
+        "bill": "{n} unități fără cache, {w} cu cache: −{s}%. Diferența crește la fiecare apel.",
+        "edit": "Prompt de sistem modificat: următoarele {k} mii de tokenuri sunt rescrise la tarif integral (+{x} unități).",
+        "back": "Următorul apel: memoria cache este refăcută, iar partea gri reapare.",
+        "idle": "5 minute fără apeluri: memoria cache a expirat. Același cost suplimentar.",
+        "real": "Execuție reală: {p}% din tokenurile de intrare recitite din cache, cost ÷ {r}."
+      },
+      "tip": {
+        "call": "Apel",
+        "what": "Dacă acest token s-ar modifica, cele {n} tokenuri din cache care urmează ({k} mii) ar fi rescrise: +{x} unități.",
+        "click": "Faceți clic pentru a accesa acest apel"
+      },
+      "footer": "Exemplu ilustrativ · 1 pătrat ≈ 1.000 de tokenuri · tarife relative",
+      "insKicker": "CONCLUZII PRINCIPALE",
+      "insights": [
+        [
+          "{a}×",
+          "tokenuri recitite pentru fiecare token nou",
+          "Execuție reală: {cr} mil. recitite din cache, {nw} mil. noi."
+        ],
+        [
+          "−{s2}%",
+          "reducerea costului datorită cache-ului",
+          "Execuție reală: cost ÷ {r}. Exemplu simplu: −{s1}%."
+        ],
+        [
+          "1 token",
+          "modificat la început: tot ce urmează se facturează din nou",
+          "Promptul de sistem, lista instrumentelor, marcajul temporal… păstrați începutul contextului neschimbat."
+        ]
+      ],
+      "chapters": [
+        [
+          "Introducere",
+          "0 s",
+          "O sarcină simplă: corectarea formatului adreselor dintr-un tabel. Fiecare pătrat reprezintă aproximativ 1.000 de tokenuri."
+        ],
+        [
+          "Prompt, model, instrumente",
+          "apelul 1",
+          "Sistemul de orchestrare transmite modelului promptul de sistem și promptul utilizatorului (albastru, intrare). Modelul analizează, apoi solicită unui instrument citirea fișierului (roz, ieșire)."
+        ],
+        [
+          "Fiecare rezultat declanșează un apel",
+          "apelurile 2–3",
+          "Conținutul fișierului revine ca informație nouă de context: începe un alt apel facturabil, fără instrucțiuni noi. Întregul apel anterior este retransmis ca intrare din cache (gri)."
+        ],
+        [
+          "Efectul cumulativ",
+          "apelurile 4–9",
+          "O a doua solicitare în aceeași conversație. Fiecare apel recitește tot conținutul anterior: partea gri crește la fiecare pas, iar volumul de date noi rămâne redus."
+        ],
+        [
+          "Costul",
+          "tarife",
+          "Intrarea din cache costă o fracțiune din intrarea nouă (aici ×0,1). Aceeași conversație, facturată cu și fără cache: diferența crește la fiecare apel."
+        ],
+        [
+          "Invalidarea cache-ului",
+          "apelurile 10–12",
+          "Memoria cache reutilizează un prefix: începutul conversației, până la prima modificare. Modificați promptul de sistem sau lăsați să treacă 5 minute fără apeluri, iar tot ce urmează va fi rescris la tarif integral."
+        ],
+        [
+          "Subagenți",
+          "în paralel",
+          "Delegarea către subagenți multiplică apelurile: fiecare își păstrează și își recitește propriul context."
+        ],
+        [
+          "Execuția reală",
+          "53 de apeluri",
+          "Același mecanism, pe date reale: o solicitare în Claude Code, 53 de apeluri la model."
+        ],
+        [
+          "Concluzie",
+          "final",
+          "Fără cache, costul datelor de intrare ale unui agent crește proporțional cu pătratul numărului de pași. Memoria cache păstrează această evoluție, dar reduce costul de aproximativ zece ori, atât timp cât începutul contextului rămâne neschimbat."
+        ]
+      ]
     }
   }
 }

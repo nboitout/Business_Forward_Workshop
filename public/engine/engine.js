@@ -123,6 +123,7 @@
           <p class="keys" data-ui-html="keys"></p>
         </div>
       </nav>
+      ${spec.qr ? `<a class="phone-qr" id="ccv-qr"><img width="144" height="144" alt=""><span data-i="qrLabel"></span></a>` : ""}
     </div>
     <div class="player"><div class="screen">
       <canvas id="ccv-chart" role="img" data-aria="chartLabel"></canvas>
@@ -130,9 +131,10 @@
     </div></div>
     <div class="copy">
       <div class="copy__top"><p class="kicker" data-i="kicker"></p>
-        <div class="lang" role="group" aria-label="Langue / Language">
+        <div class="lang" role="group" aria-label="Langue / Language / Limbă">
           <button type="button" data-lang="fr" lang="fr" aria-pressed="true" title="Français">FR</button>
           <button type="button" data-lang="en" lang="en" aria-pressed="false" title="English">EN</button>
+          ${spec.i18n.ro ? '<button type="button" data-lang="ro" lang="ro" aria-pressed="false" title="Română">RO</button>' : ""}
         </div></div>
       <h1 id="ccv-title" data-i="title"></h1>
       <p class="lede" data-i="lede"></p>
@@ -172,8 +174,8 @@
     const fmtValue = (v) => {
       const f = spec.format || { kind: "int" };
       if (f.kind === "pct") return Math.round(v) + (lang === "fr" ? " %" : "%");
-      if (f.kind === "dec") { const n = v.toFixed(f.digits == null ? 1 : f.digits); return (lang === "fr" ? n.replace(".", ",") : n) + ((f.suffix && f.suffix[lang]) || ""); }
-      return Math.round(v).toLocaleString(lang === "fr" ? "fr-FR" : "en-US").replace(/ /g, " ");
+      if (f.kind === "dec") { const n = v.toFixed(f.digits == null ? 1 : f.digits); return (["fr", "ro"].includes(lang) ? n.replace(".", ",") : n) + ((f.suffix && f.suffix[lang]) || ""); }
+      return Math.round(v).toLocaleString(lang === "ro" ? "ro-RO" : lang === "fr" ? "fr-FR" : "en-US").replace(/ /g, " ");
     };
 
     chart = mod.create({
@@ -287,14 +289,21 @@
     }
 
     // ── langue, navigation, taille ──
+    const supportsLang = (code) => Object.hasOwn(site.ui, code) && Object.hasOwn(spec.i18n, code);
     function applyLang(next) {
-      lang = next; L = merged(); document.documentElement.lang = next; document.title = L.docTitle;
+      if (!supportsLang(next)) next = "en";
+      lang = next; L = merged(); $("ccv-cta").href = spec.cta.href + "#" + next; document.documentElement.lang = next; document.title = L.docTitle;
       document.querySelector('meta[name="description"]').content = L.docDesc;
       document.querySelectorAll("[data-i]").forEach((el) => { if (L[el.dataset.i] !== undefined) el.textContent = L[el.dataset.i]; });
       document.querySelectorAll("[data-ui]").forEach((el) => { el.textContent = ui()[el.dataset.ui]; });
       document.querySelectorAll("[data-ui-html]").forEach((el) => { el.innerHTML = ui()[el.dataset.uiHtml]; });
       document.querySelectorAll("[data-aria]").forEach((el) => el.setAttribute("aria-label", L[el.dataset.aria]));
       $("nav").setAttribute("aria-label", ui().navLabel);
+      if (spec.qr) {
+        const qr = $("ccv-qr");
+        qr.href = spec.qr.url + "#" + next;
+        qr.querySelector("img").src = spec.qr.images[next];
+      }
       site.tabs.forEach((tb) => { document.querySelector(`[data-tab-label="${tb.id}"]`).textContent = tb.label[next]; document.querySelector(`[data-tab-short="${tb.id}"]`).textContent = tb.short[next];
         document.querySelector(`.tabs a[data-tab="${tb.id}"]`).href = tb.href + "#" + next; });
       document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === next)));
@@ -307,10 +316,11 @@
       try { history.replaceState(null, "", "#" + next); } catch (e) {}
     }
     document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => { if (b.dataset.lang !== lang) applyLang(b.dataset.lang); }));
-    const initialLang = () => { const h = location.hash.replace("#", "").split(",")[0]; if (site.ui[h]) return h;
-      try { const s = localStorage.getItem("ccv-lang"); if (site.ui[s]) return s; } catch (e) {}
-      return (navigator.language || "fr").toLowerCase().startsWith("fr") ? "fr" : "en"; };
-    window.addEventListener("hashchange", () => { const h = location.hash.replace("#", "").split(",")[0]; if (site.ui[h] && h !== lang) applyLang(h); });
+    const initialLang = () => { const h = location.hash.replace("#", "").split(",")[0]; if (Object.hasOwn(site.ui, h)) return supportsLang(h) ? h : "en";
+      try { const s = localStorage.getItem("ccv-lang"); if (Object.hasOwn(site.ui, s)) return supportsLang(s) ? s : "en"; } catch (e) {}
+      const preferred = (navigator.language || "fr").toLowerCase().split("-")[0];
+      return supportsLang(preferred) ? preferred : "en"; };
+    window.addEventListener("hashchange", () => { const h = location.hash.replace("#", "").split(",")[0]; if (Object.hasOwn(site.ui, h) && h !== lang) applyLang(h); });
 
     const section = document.querySelector(".ccv"), inner = document.querySelector(".ccv__inner"), player = document.querySelector(".player");
     function fitPlayer() {

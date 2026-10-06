@@ -8,7 +8,7 @@ A static, interactive workshop presentation, ready for GitHub and Vercel.
 - `/trace/`: Anatomy of a prompt — an animated real agent execution trace.
 - `/caching/`: Agent bill & cache — animated token accounting, cache behavior, and guided step mode.
 
-Original interactive content and datasets copied from the local Longevity Clinic website. Branding, local Source Sans 3 fonts, and cream/olive/yellow palette reused from the Business Forward questionnaire in Social Inno - Raiffeisen. The original source projects are unchanged. English and French content are retained from the source pages. Pricing examples remain illustrative source content, not a current price quote.
+Original interactive content and datasets copied from the local Longevity Clinic website. Branding, local Source Sans 3 fonts, and cream/olive/yellow palette reused from the Business Forward questionnaire in Social Inno - Raiffeisen. The original source projects are unchanged. English, French, and Romanian content are retained from the source pages. Pricing examples remain illustrative source content, not a current price quote.
 
 ## Preview
 
