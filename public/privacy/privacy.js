@@ -8,6 +8,8 @@
     personal:['PERSONAL ACCOUNT SETTINGS','SETĂRI PENTRU CONTURI PERSONALE'],
     simulation:['Interactive illustration only. Your account settings are not changed.','Simulare interactivă. Setările contului dvs. nu sunt modificate.'],
     control:['The control in your account','Setarea din contul dvs.'],
+    actionLabel:['CHANGE YOUR ACTUAL ACCOUNT SETTINGS','MODIFICAȚI SETĂRILE CONTULUI DVS.'],
+    settingsHelp:['Opens in a new tab. Sign in to the account you will use for the workshop.','Se deschide într-o filă nouă. Autentificați-vă în contul pe care îl veți folosi la workshop.'],
     newchat:['Your next conversation','Următoarea conversație'], answer:['AI still responds to your request.','AI-ul continuă să răspundă cerințelor dvs.'],
     training:['MODEL TRAINING','ANTRENAREA MODELELOR'],history:['NEW CHAT HISTORY','ISTORICUL CONVERSAȚIILOR NOI'],
     past:['01 / PAST CONVERSATIONS','01 / CONVERSAȚII ANTERIOARE'],retention:['02 / STORAGE & EXCEPTIONS','02 / STOCARE ȘI EXCEPȚII'],feedback:['03 / FEEDBACK','03 / FEEDBACK'],
@@ -83,6 +85,9 @@
     ['past','retention','feedback'].forEach(key=>$(key+'-text').textContent=t(m[key]));
     $('settings-path').textContent=t(m.path);
     $('settings-link').href=m.url;
+    $('settings-link').textContent=t([`Open ${m.name} privacy settings ↗`,`Deschideți setările de confidențialitate ${m.name} ↗`]);
+    $('settings-url').href=m.url;
+    $('settings-url').textContent=m.url;
     const labels={'Data controls':'Controale privind datele','History & defaults':'Istoric și setări implicite','Model improvement':'Îmbunătățirea modelelor','Training & feedback':'Antrenare și feedback','Retention':'Păstrarea datelor','Privacy Hub':'Centrul de confidențialitate','Activity & defaults':'Activitate și setări implicite'};
     $('provider-sources').replaceChildren(...m.sources.map(([label,url])=>{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t([label,labels[label]])+' ↗';return a;}));
     const url=new URL(location.href);url.searchParams.set('provider',provider);url.searchParams.set('training',enabled?'on':'off');history.replaceState(null,'',url.pathname+url.search+url.hash);
