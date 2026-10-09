@@ -32,7 +32,7 @@
     toggle.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.language === lang)));
     document.querySelectorAll('a[href]').forEach(a => {
       const url = new URL(a.getAttribute('href'),location.href);
-      if(url.origin !== location.origin || !['/','/preparation/','/privacy/','/workshop/','/trace/','/caching/'].includes(url.pathname)) return;
+      if(url.origin !== location.origin || !['/','/preparation/','/privacy/','/workshop/','/presentation/','/trace/','/caching/'].includes(url.pathname)) return;
       if(a.getAttribute('href').startsWith('#')) return;
       if(['/trace/','/caching/'].includes(url.pathname)) { url.hash = lang; url.searchParams.delete('lang'); }
       else url.searchParams.set('lang',lang);

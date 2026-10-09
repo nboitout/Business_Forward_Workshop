@@ -29,3 +29,21 @@ Use the two lesson tabs to move between pages. Play/pause, stop, chapter buttons
 ## Adding lessons
 
 The shared engine is designed for additional chapter-based visualizations. Add a spec, page generation entry, and navigation item for each new lesson; custom visualization types belong under `public/engine/charts`.
+
+## Workshop slide deck
+
+The materials page at `/workshop/` links to the 16-slide presentation at `/presentation/`.
+The viewer uses the original slide artwork and offers thumbnails, keyboard navigation,
+swiping, zoom, and a download of the original PowerPoint. Like ROP's slide lightbox,
+it rotates landscape slides 90 degrees in full-screen view on portrait phones
+(up to 760px wide), then returns to normal when the phone is turned to landscape.
+Swipe left/right to browse; rotated slides also support up/down swipes. Zoomed slides
+pan instead of navigating. Escape closes full screen and restores focus.
+
+To replace the current image-based deck, update its titles in
+`tools/export_workshop_deck.py`, then run
+`python tools/export_workshop_deck.py "path/to/deck.pptx"` (requires Pillow).
+The exporter follows the PowerPoint's slide order, preserves its overlaid hyperlink,
+and writes WebP slides, thumbnails, `slides.json`, and the original PowerPoint.
+It rejects unsupported overlaid content so it cannot silently disappear.
+Update the slide count and cover link in the HTML if the deck changes.
