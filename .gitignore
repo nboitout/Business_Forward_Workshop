@@ -4,3 +4,4 @@ output/
 .playwright-cli/
 __pycache__/
 .env*
+public/mentoring/app.js

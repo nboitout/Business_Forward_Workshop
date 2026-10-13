@@ -1,6 +1,12 @@
 {
   "framework": null,
-  "buildCommand": "",
+  "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [{ "source": "/api/auth/:route*", "destination": "/api/mentoring-auth?route=:route*" }],
+  "headers": [{ "source": "/mentoring/:path*", "headers": [
+    { "key": "X-Frame-Options", "value": "DENY" },
+    { "key": "X-Content-Type-Options", "value": "nosniff" },
+    { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+  ] }]
 }

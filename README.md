@@ -20,7 +20,7 @@ Page text and chapter content live in `public/specs/trace.json` and `public/spec
 
 ## GitHub and Vercel
 
-Create a GitHub repository with this folder's contents, then import that repository into Vercel. Select the Other framework preset. The included `vercel.json` sets `public` as the output directory, with no build command. Only the public folder is deployed. No environment variables or database are required.
+The GitHub repository is connected to the `business_forward_workshop` Vercel project. The Other framework preset builds the mentoring browser bundle with `npm run build`, serves `public`, and deploys the two Node API functions. The workshop remains static; only mentoring uses the database and authentication configuration below.
 
 ## Workshop controls
 
@@ -47,3 +47,24 @@ The exporter follows the PowerPoint's slide order, preserves its overlaid hyperl
 and writes WebP slides, thumbnails, `slides.json`, and the original PowerPoint.
 It rejects unsupported overlaid content so it cannot silently disappear.
 Update the slide count and cover link in the HTML if the deck changes.
+
+## Mentoring tracker
+
+`/mentoring/` is public: each company starts with 600 minutes, and a standard meeting records 60 meeting minutes plus 60 follow-up minutes. Companies need no account. Public responses include company names, budgets, session dates/durations and a running timer. Private working notes, account/session data and audit records never appear in public responses. The page is marked `noindex`, which discourages indexing but does not make public data private.
+
+Use **Mentor sign in** for `nicolas@agentic-sdlc.it`. The first visit uses **First visit or forgotten password?**, which requests an email code and lets the mentor choose a password. There is no default password. The account is pre-created in Neon Auth; server authorization checks its fixed user ID and email on every administrative request. Company users cannot register for editing through this app.
+
+Mentor features: log/edit/remove sessions, adjust budgets, start a persistent server timer and record it as a standard two-hour session (with optional duration adjustments). Running time is visibly provisional until saved. The one-timer database constraint prevents overlapping timers. Client-generated entry IDs make saves retry-safe. Stale edits are rejected; removed entries are retained as voided records, with an audit trail. All dates use Europe/Bucharest. The public view polls every 20 seconds while visible, and indicates stale connections.
+
+Neon project: `business-forward-mentoring` (`purple-hill-95472493`), AWS Frankfurt, production branch `br-young-surf-bawp7gkw`, database `mentoring`. Schema source: `database/mentoring.sql`. Do not rerun the initial schema against an initialized database. Changes should use a new reviewed migration.
+
+Vercel server variables (never include these in browser bundles):
+
+- `DATABASE_URL`: pooled Neon connection string.
+- `NEON_AUTH_BASE_URL`: managed Neon Auth endpoint.
+- `MENTOR_USER_ID`: the pre-created mentor's ID.
+- `APP_ORIGIN`: `https://businessforwardworkshop.vercel.app` (used to validate state-changing browser requests).
+
+The same-origin auth proxy keeps managed sessions usable in browsers with third-party cookie restrictions and only forwards the login, session, logout and password-reset endpoints. The managed provider handles password hashing, email codes and rate limiting. Initial email delivery uses Neon's shared sender; a custom SMTP provider is recommended for dependable long-term password recovery. No email is sent during deployment.
+
+Local development: `npm ci`, `npm run build`, then `npm run dev` (reads the ignored `.env.local`, serving port 8787). Static-only workshop previews can still use the Python command above. Run `npm test` for accounting, validation and response-redaction checks. Run `node --env-file=.env.local tests/mentoring-integration.mjs` for database-backed API checks; it uses temporary tables that disappear when the test connection closes, leaving production records untouched. Browser checks cover the public dashboard, login/error states, session forms and mobile layout. Live email-code/password onboarding must be completed by the account owner.
