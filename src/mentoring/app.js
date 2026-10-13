@@ -1,5 +1,6 @@
 import { createAuthClient } from '@neondatabase/auth';
 import { hours, elapsed, totals, sessionSegments, escapeHtml as esc, csvCell } from './format.js';
+import { setupContact } from './contact.js';
 const $ = selector => document.querySelector(selector);
 const auth = createAuthClient(`${location.origin}/api/auth`);
 const email = 'nicolas@agentic-sdlc.it';
@@ -204,6 +205,7 @@ window.addEventListener('scroll',hideSessionTip,{passive:true});
 window.addEventListener('resize',hideSessionTip);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(true);});
 window.addEventListener('online',()=>refresh(true));
+setupContact();
 setInterval(()=>{if(!document.hidden)refresh(true);},20000);setInterval(tick,1000);
 await refresh();
 try { const result=await auth.getSession();if(result.data?.user){await api(null,true);admin=true;await refresh();} } catch { /* Public access remains available when signed out. */ }
