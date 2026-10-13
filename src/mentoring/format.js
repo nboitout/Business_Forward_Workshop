@@ -6,5 +6,12 @@ export function totals(entries, companyId) {
   const followup = own.reduce((n,e) => n + e.followupMinutes, 0);
   return { entries: own, meeting, followup, used: meeting + followup };
 }
+export function sessionSegments(entries, budgetMinutes) {
+  const ordered = [...entries].sort((a,b)=>(a.sessionNumber ?? 0)-(b.sessionNumber ?? 0));
+  const used = ordered.reduce((sum,e)=>sum+e.meetingMinutes+e.followupMinutes,0);
+  // An overrun keeps every segment visible; the card separately reports the excess.
+  const scale = Math.max(budgetMinutes,used,1);
+  return ordered.map((entry,index)=>({ ...entry, number:entry.sessionNumber ?? index+1, width:100*(entry.meetingMinutes+entry.followupMinutes)/scale }));
+}
 export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const csvCell = value => '"' + String(value ?? '').replace(/^[=+@\-\t\r]/, m => "'" + m).replace(/"/g, '""') + '"';

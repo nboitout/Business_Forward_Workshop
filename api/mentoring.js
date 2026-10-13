@@ -13,7 +13,7 @@ return async function handler(req, res) {
       // One snapshot prevents totals and history disagreeing during a concurrent save.
       const { rows: [data] } = await database().query(`SELECT
         (SELECT coalesce(json_agg(c ORDER BY display_order), '[]') FROM mentoring_companies c) companies,
-        (SELECT coalesce(json_agg(e ORDER BY session_date DESC, created_at DESC), '[]') FROM mentoring_entries e WHERE voided_at IS NULL) entries,
+        (SELECT coalesce(json_agg(e ORDER BY session_number DESC NULLS LAST, created_at DESC), '[]') FROM mentoring_entries e WHERE voided_at IS NULL) entries,
         (SELECT row_to_json(t) FROM mentoring_timer t WHERE id = 1) timer, now() AS server_time`);
       const result = publicSnapshot(data.companies, data.entries, data.timer, data.server_time);
       if (admin) {
@@ -47,10 +47,11 @@ return async function handler(req, res) {
           if (timer.company_id !== entry.companyId || new Date(timer.started_at).getTime() !== new Date(body.startedAt).getTime()) throw new Error('The active timer changed. Refresh before saving.');
         }
         if (body.updatedAt && action === 'save-entry') {
-          const result = await client.query(`UPDATE mentoring_entries SET session_date=$2, meeting_minutes=$3, followup_minutes=$4, private_note=$5, updated_at=now() WHERE id=$1 AND updated_at=$6 AND voided_at IS NULL RETURNING id`, [recordId, entry.date, entry.meeting, entry.followup, entry.note, body.updatedAt]);
+          const result = await client.query(`UPDATE mentoring_entries SET session_date=$2, meeting_minutes=$3, followup_minutes=$4, private_note=$5, session_label=$7, updated_at=now() WHERE id=$1 AND updated_at=$6 AND voided_at IS NULL RETURNING id`, [recordId, entry.date, entry.meeting, entry.followup, entry.note, body.updatedAt, entry.label]);
           if (!result.rowCount) throw new Error('This entry changed in another tab. Refresh before editing.');
         } else {
-          await client.query(`INSERT INTO mentoring_entries (id,company_id,session_date,meeting_minutes,followup_minutes,private_note) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO NOTHING`, [recordId, entry.companyId, entry.date, entry.meeting, entry.followup, entry.note]);
+          await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`mentoring-session:${entry.companyId}`]);
+          await client.query(`INSERT INTO mentoring_entries (id,company_id,session_date,meeting_minutes,followup_minutes,private_note,session_label,session_number) SELECT $1,$2,$3,$4,$5,$6,$7,coalesce(max(session_number),0)+1 FROM mentoring_entries WHERE company_id=$2 ON CONFLICT (id) DO NOTHING`, [recordId, entry.companyId, entry.date, entry.meeting, entry.followup, entry.note, entry.label]);
         }
         if (action === 'stop-timer') await client.query('DELETE FROM mentoring_timer WHERE id = 1');
         details = { companyId: entry.companyId, meetingMinutes: entry.meeting, followupMinutes: entry.followup };

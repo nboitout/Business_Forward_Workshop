@@ -13,6 +13,7 @@ const baseline=(await client.query('SELECT count(*)::int n FROM public.mentoring
 try {
   const schema=(await readFile('database/mentoring.sql','utf8')).replaceAll('CREATE TABLE','CREATE TEMP TABLE');
   await client.query(schema);
+  await client.query(await readFile('database/migrations/002_session_segments.sql','utf8'));
   client.release=()=>{};
   const handler=createHandler({database:()=>({query:(...args)=>client.query(...args),connect:async()=>client}),getSession:async req=>req.headers.testAdmin?{user:{id:'test-mentor',email:'nicolas@agentic-sdlc.it'}}:null,checkOrigin:req=>req.headers.origin==='http://localhost:8787'});
   async function call(body=null, admin=true, origin='http://localhost:8787', view=admin?'admin':'') {
@@ -28,6 +29,8 @@ try {
   assert.equal((await call(entry)).status,200);
   let publicData=await call(null,false);
   assert.equal(publicData.entries.length,1);
+  assert.equal(publicData.entries[0].sessionNumber,1);
+  assert.equal(publicData.entries[0].label,'Mentoring session');
   assert.equal(publicData.entries[0].meetingMinutes+publicData.entries[0].followupMinutes,120);
   assert.ok(!JSON.stringify(publicData).includes('PRIVATE'));
   let privateData=await call();assert.equal(privateData.entries[0].note,'PRIVATE TEST NOTE');
@@ -42,10 +45,18 @@ try {
   assert.equal((await call(stop)).status,200);
   assert.equal((await call(stop)).status,200);
   publicData=await call(null,false);assert.equal(publicData.timer,null);assert.equal(publicData.entries.length,2);
+  assert.deepEqual(publicData.entries.map(e=>e.sessionNumber),[2,1]);
+  const followup={...entry,id:randomUUID(),meetingMinutes:0,followupMinutes:180,label:'Bootcamp',sessionDate:'2026-10-10'};
+  assert.equal((await call(followup)).status,200);
+  publicData=await call(null,false);
+  assert.equal(publicData.entries[0].meetingMinutes,0);
+  assert.equal(publicData.entries[0].followupMinutes,180);
+  assert.equal(publicData.entries[0].label,'Bootcamp');
+  assert.equal(publicData.entries[0].sessionNumber,3);
   assert.equal((await call({action:'budget',companyId:'acc',budgetMinutes:0})).status,200);
   privateData=await call();const first=privateData.entries.find(e=>e.id===entry.id);
   assert.equal((await call({action:'void-entry',id:first.id,updatedAt:first.updatedAt})).status,200);
-  assert.equal((await call(null,false)).entries.length,1);
+  assert.equal((await call(null,false)).entries.length,2);
   assert.equal((await client.query('SELECT count(*)::int n FROM public.mentoring_entries')).rows[0].n,baseline);
   console.log('Integration checks passed: authorization, cross-origin rejection, private notes, 2h charging, retries, edit conflicts, timer locking, budget edits, removal. Production rows unchanged.');
 }finally{await client.end();}

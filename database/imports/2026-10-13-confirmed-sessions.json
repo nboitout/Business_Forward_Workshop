@@ -1,0 +1,25 @@
+{
+  "source": "Mentor-confirmed hours and dates in the 13 October 2026 conversation",
+  "companies": [
+    { "id": "elmar-trading", "sessions": [
+      { "id": "5604596b-850a-4bde-a986-000000000001", "number": 1, "label": "First meeting", "date": "2026-10-01", "meetingMinutes": 60, "followupMinutes": 60 },
+      { "id": "5604596b-850a-4bde-a986-000000000002", "number": 2, "label": "Bootcamp", "date": "2026-10-10", "meetingMinutes": 90, "followupMinutes": 90 }
+    ]},
+    { "id": "ai-consulting", "sessions": [
+      { "id": "5604596b-850a-4bde-a986-000000000003", "number": 1, "label": "First meeting", "date": "2026-10-05", "meetingMinutes": 60, "followupMinutes": 60 },
+      { "id": "5604596b-850a-4bde-a986-000000000004", "number": 2, "label": "Bootcamp", "date": "2026-10-10", "meetingMinutes": 90, "followupMinutes": 150 }
+    ]},
+    { "id": "acc", "sessions": [
+      { "id": "5604596b-850a-4bde-a986-000000000005", "number": 1, "label": "First meeting", "date": "2026-10-05", "meetingMinutes": 60, "followupMinutes": 60 },
+      { "id": "5604596b-850a-4bde-a986-000000000006", "number": 2, "label": "Bootcamp", "date": "2026-10-10", "meetingMinutes": 90, "followupMinutes": 120 }
+    ]},
+    { "id": "scule-tencuiala", "sessions": [
+      { "id": "5604596b-850a-4bde-a986-000000000007", "number": 1, "label": "First meeting", "date": "2026-10-01", "meetingMinutes": 60, "followupMinutes": 60 },
+      { "id": "5604596b-850a-4bde-a986-000000000008", "number": 2, "label": "Bootcamp", "date": "2026-10-10", "meetingMinutes": 90, "followupMinutes": 150 }
+    ]},
+    { "id": "laboratorul-de-bucurii", "sessions": [
+      { "id": "5604596b-850a-4bde-a986-000000000009", "number": 1, "label": "First meeting", "date": "2026-10-01", "meetingMinutes": 60, "followupMinutes": 120 },
+      { "id": "5604596b-850a-4bde-a986-000000000010", "number": 2, "label": "Bootcamp", "date": "2026-10-10", "meetingMinutes": 0, "followupMinutes": 180 }
+    ]}
+  ]
+}
