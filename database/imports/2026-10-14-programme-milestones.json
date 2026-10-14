@@ -1,0 +1,8 @@
+{
+  "source": "Mentor confirmed 25 September discovery and one reserved planned rehearsal hour per company on 14 October 2026",
+  "companies": ["acc", "elmar-trading", "laboratorul-de-bucurii", "scule-tencuiala", "ai-consulting"],
+  "sessions": [
+    { "label": "Business Discovery", "date": "2026-09-25", "status": "completed", "meetingMinutes": 0, "followupMinutes": 60 },
+    { "label": "Final pitch rehearsal (dry run)", "date": null, "status": "planned", "meetingMinutes": 60, "followupMinutes": 0 }
+  ]
+}

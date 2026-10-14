@@ -18,7 +18,7 @@ test('rejects negative, fractional, impossible and future entries',()=>{
 test('public response never leaks private notes or audit fields',()=>{
   const result=publicSnapshot([{id:'acc',name:'ACC',budget_minutes:600,private:'secret'}],[{id:'one',company_id:'acc',session_date:'2026-10-13',meeting_minutes:60,followup_minutes:60,private_note:'CONFIDENTIAL',created_at:'secret',actor_id:'mentor'}],{company_id:'acc',started_at:'2026-10-13T10:00:00Z',private_note:'CONFIDENTIAL'},'now');
   assert.doesNotMatch(JSON.stringify(result),/CONFIDENTIAL|secret|mentor|private_note|actor_id/);
-  assert.deepEqual(Object.keys(result.entries[0]),['id','companyId','date','meetingMinutes','followupMinutes','label','sessionNumber']);
+  assert.deepEqual(Object.keys(result.entries[0]),['id','companyId','date','meetingMinutes','followupMinutes','label','sessionNumber','status']);
 });
 test('timer duration survives reload and formats over an hour',()=>{assert.equal(elapsed(3671),'01:01:11');assert.equal(elapsed(-1),'00:00:00');assert.equal(hours(125),'2h 5m');});
 test('company totals cannot include another company',()=>{assert.equal(totals([entry,{...entry,companyId:'elmar-trading'}],'acc').used,120);});
@@ -39,4 +39,22 @@ test('confirmed exceptions produce the correct balances and proportional session
 test('overruns and zero allocations still show all recorded session segments',()=>{
   const entries=[{sessionNumber:1,meetingMinutes:60,followupMinutes:60},{sessionNumber:2,meetingMinutes:90,followupMinutes:150}];
   for(const budget of [0,120]) assert.equal(sessionSegments(entries,budget).reduce((n,s)=>n+s.width,0),100);
+});
+test('planned work reserves time without increasing completed hours; completion does not charge twice',()=>{
+  const rehearsal={companyId:'acc',status:'planned',date:null,meetingMinutes:60,followupMinutes:0};
+  const before=totals([entry,rehearsal],'acc');
+  assert.equal(before.used,120); assert.equal(before.reserved,60); assert.equal(before.committed,180);
+  const after=totals([entry,{...rehearsal,status:'completed',date:'2026-10-14'}],'acc');
+  assert.equal(after.used,180); assert.equal(after.reserved,0); assert.equal(after.committed,180);
+});
+test('planned dates can be unconfirmed or future, but completed sessions need a past or current date',()=>{
+  for(const sessionDate of [null,'2026-11-15']) assert.equal(validateEntry({...entry,status:'planned',sessionDate},'2026-10-14').status,'planned');
+  for(const sessionDate of [null,'2026-11-15']) assert.throws(()=>validateEntry({...entry,status:'completed',sessionDate},'2026-10-14'));
+  assert.throws(()=>validateEntry({...entry,status:'invalid'},'2026-10-14'));
+});
+test('discovery precedes meetings and planned work follows completed work in the bar',()=>{
+  const entries=[{...entry,date:'2026-10-10',sessionNumber:2},{...entry,date:'2026-09-25',sessionNumber:3},{...entry,status:'planned',date:null,sessionNumber:4}];
+  const segments=sessionSegments(entries,720);
+  assert.deepEqual(segments.map(e=>e.sessionNumber),[3,2,4]);
+  assert.deepEqual(segments.map(e=>e.number),[1,2,3]);
 });

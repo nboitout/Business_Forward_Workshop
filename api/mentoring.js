@@ -34,6 +34,7 @@ return async function handler(req, res) {
       let details = {};
       if (action === 'save-entry' || action === 'stop-timer') {
         const entry = validateEntry(body);
+        if (action === 'stop-timer' && entry.status !== 'completed') throw new Error('A finished timer must be recorded as completed.');
         recordId = requireUuid(body.id);
         if (action === 'stop-timer') {
           const { rows: [timer] } = await client.query('SELECT * FROM mentoring_timer WHERE id = 1 FOR UPDATE');
@@ -47,14 +48,14 @@ return async function handler(req, res) {
           if (timer.company_id !== entry.companyId || new Date(timer.started_at).getTime() !== new Date(body.startedAt).getTime()) throw new Error('The active timer changed. Refresh before saving.');
         }
         if (body.updatedAt && action === 'save-entry') {
-          const result = await client.query(`UPDATE mentoring_entries SET session_date=$2, meeting_minutes=$3, followup_minutes=$4, private_note=$5, session_label=$7, updated_at=now() WHERE id=$1 AND updated_at=$6 AND voided_at IS NULL RETURNING id`, [recordId, entry.date, entry.meeting, entry.followup, entry.note, body.updatedAt, entry.label]);
+          const result = await client.query(`UPDATE mentoring_entries SET session_date=$2, meeting_minutes=$3, followup_minutes=$4, private_note=$5, session_label=$7, status=$8, updated_at=now() WHERE id=$1 AND updated_at=$6 AND voided_at IS NULL RETURNING id`, [recordId, entry.date, entry.meeting, entry.followup, entry.note, body.updatedAt, entry.label, entry.status]);
           if (!result.rowCount) throw new Error('This entry changed in another tab. Refresh before editing.');
         } else {
           await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`mentoring-session:${entry.companyId}`]);
-          await client.query(`INSERT INTO mentoring_entries (id,company_id,session_date,meeting_minutes,followup_minutes,private_note,session_label,session_number) SELECT $1,$2,$3,$4,$5,$6,$7,coalesce(max(session_number),0)+1 FROM mentoring_entries WHERE company_id=$2 ON CONFLICT (id) DO NOTHING`, [recordId, entry.companyId, entry.date, entry.meeting, entry.followup, entry.note, entry.label]);
+          await client.query(`INSERT INTO mentoring_entries (id,company_id,session_date,meeting_minutes,followup_minutes,private_note,session_label,status,session_number) SELECT $1,$2,$3,$4,$5,$6,$7,$8,coalesce(max(session_number),0)+1 FROM mentoring_entries WHERE company_id=$2 ON CONFLICT (id) DO NOTHING`, [recordId, entry.companyId, entry.date, entry.meeting, entry.followup, entry.note, entry.label, entry.status]);
         }
         if (action === 'stop-timer') await client.query('DELETE FROM mentoring_timer WHERE id = 1');
-        details = { companyId: entry.companyId, meetingMinutes: entry.meeting, followupMinutes: entry.followup };
+        details = { companyId: entry.companyId, meetingMinutes: entry.meeting, followupMinutes: entry.followup, status: entry.status, sessionDate: entry.date };
       } else if (action === 'start-timer') {
         validateEntry({ ...body, sessionDate: new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Bucharest' }), meetingMinutes: 60, followupMinutes: 60 });
         const result = await client.query('INSERT INTO mentoring_timer (id,company_id,private_note) VALUES (1,$1,$2) ON CONFLICT (id) DO NOTHING RETURNING id', [body.companyId, String(body.note || '')]);

@@ -5,6 +5,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { createHandler } from '../api/mentoring.js';
+import { importProgrammeMilestones } from '../tools/import-programme-milestones.mjs';
+import { totals } from '../src/mentoring/format.js';
 // TEMP tables require a DIRECT connection: transaction pooling must never be used.
 const directUrl=process.env.DATABASE_URL.replace('-pooler.', '.').replace('sslmode=require','sslmode=verify-full');
 const client=new pg.Client({connectionString:directUrl,application_name:'mentoring-temp-tests'});
@@ -14,6 +16,7 @@ try {
   const schema=(await readFile('database/mentoring.sql','utf8')).replaceAll('CREATE TABLE','CREATE TEMP TABLE');
   await client.query(schema);
   await client.query(await readFile('database/migrations/002_session_segments.sql','utf8'));
+  await client.query(await readFile('database/migrations/003_planned_sessions.sql','utf8'));
   client.release=()=>{};
   const handler=createHandler({database:()=>({query:(...args)=>client.query(...args),connect:async()=>client}),getSession:async req=>req.headers.testAdmin?{user:{id:'test-mentor',email:'nicolas@agentic-sdlc.it'}}:null,checkOrigin:req=>req.headers.origin==='http://localhost:8787'});
   async function call(body=null, admin=true, origin='http://localhost:8787', view=admin?'admin':'') {
@@ -57,6 +60,23 @@ try {
   privateData=await call();const first=privateData.entries.find(e=>e.id===entry.id);
   assert.equal((await call({action:'void-entry',id:first.id,updatedAt:first.updatedAt})).status,200);
   assert.equal((await call(null,false)).entries.length,2);
+  const planned={...entry,id:randomUUID(),sessionDate:null,label:'Pitch rehearsal',status:'planned',meetingMinutes:60,followupMinutes:0};
+  assert.equal((await call(planned)).status,200);
+  const reservedBefore=totals((await call(null,false)).entries,'acc');
+  assert.equal(reservedBefore.reserved,60);
+  privateData=await call();const reservation=privateData.entries.find(e=>e.id===planned.id);
+  assert.equal(reservation.date,null);assert.equal(reservation.status,'planned');
+  assert.equal((await call({...planned,status:'completed',updatedAt:reservation.updatedAt})).status,400);
+  assert.equal((await call({...planned,status:'completed',sessionDate:'2026-10-13',updatedAt:reservation.updatedAt})).status,200);
+  const completedAfter=totals((await call(null,false)).entries,'acc');
+  assert.equal(completedAfter.reserved,0);assert.equal(completedAfter.committed,reservedBefore.committed);
+  assert.equal(await importProgrammeMilestones(client,'test-mentor'),10);
+  assert.equal(await importProgrammeMilestones(client,'test-mentor'),0);
+  publicData=await call(null,false);
+  const milestones=publicData.entries.filter(e=>e.id.startsWith('f8ae6d04-'));
+  assert.equal(milestones.length,10);
+  assert.equal(milestones.filter(e=>e.status==='planned' && e.date===null).length,5);
+  assert.equal(milestones.filter(e=>e.label==='Business Discovery' && e.date==='2026-09-25').length,5);
   assert.equal((await client.query('SELECT count(*)::int n FROM public.mentoring_entries')).rows[0].n,baseline);
   console.log('Integration checks passed: authorization, cross-origin rejection, private notes, 2h charging, retries, edit conflicts, timer locking, budget edits, removal. Production rows unchanged.');
 }finally{await client.end();}

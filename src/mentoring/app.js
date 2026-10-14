@@ -15,7 +15,7 @@ function showSessionTip(button) {
   const entry = data?.entries.find(e=>e.id===button.dataset.session);
   if (!entry) return;
   const tip=$('#session-tooltip'), rect=button.getBoundingClientRect();
-  tip.innerHTML=`<strong>Session ${entry.sessionNumber} · ${esc(entry.label || 'Mentoring session')}</strong><span>${esc(dateLabel(entry.date))}</span><p>${hours(entry.meetingMinutes)} meeting + ${hours(entry.followupMinutes)} follow-up</p><b>${hours(entry.meetingMinutes+entry.followupMinutes)} total</b>`;
+  tip.innerHTML=`<strong>Session ${button.dataset.sessionNumber} · ${esc(entry.label || 'Mentoring session')}</strong>${entry.status === 'planned' ? '<span>Planned · time reserved</span>' : ''}<span>${esc(dateLabel(entry.date))}</span><p>${hours(entry.meetingMinutes)} meeting + ${hours(entry.followupMinutes)} follow-up / preparation</p><b>${hours(entry.meetingMinutes+entry.followupMinutes)} total</b>`;
   tip.hidden=false;
   tip.style.left=`${Math.max(10,Math.min(rect.left,innerWidth-tip.offsetWidth-10))}px`;
   tip.style.top=`${rect.bottom+tip.offsetHeight+12 < innerHeight ? rect.bottom+8 : Math.max(10,rect.top-tip.offsetHeight-8)}px`;
@@ -63,16 +63,16 @@ function render() {
   renderAccess();
   const initials = {'acc':'ACC','elmar-trading':'ET','laboratorul-de-bucurii':'LB','scule-tencuiala':'ST','ai-consulting':'A&I'};
   $('#company-grid').innerHTML = data.companies.map(c => {
-    const t = totals(data.entries,c.id), remaining = c.budgetMinutes - t.used;
+    const t = totals(data.entries,c.id), remaining = c.budgetMinutes - t.committed;
     const segments = sessionSegments(t.entries,c.budgetMinutes);
-    const bar = segments.map(e=>`<button class="session-segment session-color-${(e.number-1)%5}" style="width:${e.width}%" data-session="${esc(e.id)}" aria-describedby="session-tooltip" aria-label="${esc(c.name)} · Session ${e.number} · ${esc(e.label || 'Mentoring session')} · ${esc(dateLabel(e.date))} · ${hours(e.meetingMinutes)} meeting + ${hours(e.followupMinutes)} follow-up"><span aria-hidden="true">${e.number}</span></button>`).join('');
-    return `<article class="company-card" data-selected="${c.id === selected}"><button class="company-select" data-company="${esc(c.id)}" aria-pressed="${c.id === selected}" aria-label="View ${esc(c.name)}"><span class="card-top"><span class="monogram">${esc(initials[c.id])}</span><span class="card-arrow" aria-hidden="true">↗</span></span>${data.timer?.companyId === c.id ? '<span class="live-label">● In session</span>' : ''}<span class="company-name">${esc(c.name)}</span><span class="remaining ${remaining < 0 ? 'over' : ''}">${hours(remaining)}</span><span class="remaining-label">${remaining < 0 ? 'over budget' : 'remaining'}</span></button><div class="session-bar" role="group" aria-label="${esc(c.name)} session breakdown">${bar}</div><span class="card-meta"><span>${hours(t.used)} used</span><span>${hours(c.budgetMinutes)} allocated</span></span></article>`;
+    const bar = segments.map(e=>`<button class="session-segment session-color-${(e.number-1)%5} ${e.status === 'planned' ? 'is-planned' : ''}" style="width:${e.width}%" data-session="${esc(e.id)}" data-session-number="${e.number}" aria-describedby="session-tooltip" aria-label="${esc(c.name)} · ${e.status === 'planned' ? 'Planned' : 'Completed'} session ${e.number} · ${esc(e.label || 'Mentoring session')} · ${esc(dateLabel(e.date))} · ${hours(e.meetingMinutes)} meeting + ${hours(e.followupMinutes)} follow-up"><span aria-hidden="true">${e.status === 'planned' ? 'P' : e.number}</span></button>`).join('');
+    return `<article class="company-card" data-selected="${c.id === selected}"><button class="company-select" data-company="${esc(c.id)}" aria-pressed="${c.id === selected}" aria-label="View ${esc(c.name)}"><span class="card-top"><span class="monogram">${esc(initials[c.id])}</span><span class="card-arrow" aria-hidden="true">↗</span></span>${data.timer?.companyId === c.id ? '<span class="live-label">● In session</span>' : ''}<span class="company-name">${esc(c.name)}</span><span class="remaining ${remaining < 0 ? 'over' : ''}">${hours(remaining)}</span><span class="remaining-label">${remaining < 0 ? 'over budget' : 'available'}</span></button><div class="session-bar" role="group" aria-label="${esc(c.name)} session breakdown">${bar}</div><span class="card-meta"><span>${hours(t.used)} used</span><span>${hours(c.budgetMinutes)} allocated</span></span>${t.reserved ? `<small class="reserved-note">${hours(t.reserved)} reserved for planned work</small>` : ''}</article>`;
   }).join('');
   if (!company()) return;
   $('#company-detail').hidden = false;
   $('#detail-heading').textContent = company().name;
-  const t = totals(data.entries,selected), remaining = company().budgetMinutes - t.used;
-  $('#detail-stats').innerHTML = `<div class="stat"><span>Time allocated</span><strong>${hours(company().budgetMinutes)}</strong><small>Total budget through 15 November 2026</small></div><div class="stat"><span>Time recorded</span><strong>${hours(t.used)}</strong><small>${hours(t.meeting)} meetings + ${hours(t.followup)} follow-up</small></div><div class="stat"><span>${remaining < 0 ? 'Over budget' : 'Time remaining'}</span><strong class="${remaining < 0 ? 'over' : ''}">${hours(remaining)}</strong><small>${remaining < 0 ? 'Discuss the additional time with Nicolas' : 'Based on actual recorded time'}</small></div><div class="stat"><span>Recorded sessions</span><strong>${t.entries.length.toString().padStart(2,'0')}</strong><small>${t.entries.length ? `Latest session: ${esc(dateLabel(t.entries[0].date))}` : 'Your next step starts here'}</small></div>`;
+  const t = totals(data.entries,selected), remaining = company().budgetMinutes - t.committed;
+  $('#detail-stats').innerHTML = `<div class="stat"><span>Time allocated</span><strong>${hours(company().budgetMinutes)}</strong><small>Total budget through 15 November 2026</small></div><div class="stat"><span>Time completed</span><strong>${hours(t.used)}</strong><small>${hours(t.meeting)} meetings + ${hours(t.followup)} follow-up / preparation</small></div><div class="stat"><span>Time reserved</span><strong>${hours(t.reserved)}</strong><small>Planned work · already deducted from available time</small></div><div class="stat"><span>${remaining < 0 ? 'Over budget' : 'Time available'}</span><strong class="${remaining < 0 ? 'over' : ''}">${hours(remaining)}</strong><small>${remaining < 0 ? 'Discuss the additional time with Nicolas' : 'Allocation minus completed and reserved time'}</small></div>`;
   const active = data.timer?.companyId === selected;
   $('#active-timer').hidden = !active;
   if (active) $('#active-timer').innerHTML = `<div><strong id="elapsed-time"></strong><span>Meeting in progress</span><p>Not charged yet. Meeting and follow-up time are recorded when Nicolas saves the session.</p></div>${admin ? '<button id="stop-timer" class="button primary">■ Finish & record</button>' : ''}`;
@@ -83,7 +83,7 @@ function render() {
     $('#active-timer').innerHTML = `<div>A timer is running for <b>${esc(data.companies.find(c => c.id === data.timer.companyId)?.name)}</b>.</div><button class="text-button" data-company="${esc(data.timer.companyId)}">Open active session →</button>`;
   }
   $('#export-csv').disabled = !t.entries.length;
-  $('#history').innerHTML = t.entries.length ? `<div class="table-scroll"><table class="history-table"><thead><tr><th>SESSION / DATE</th><th>MEETING</th><th>FOLLOW-UP</th><th>TOTAL</th>${admin ? '<th>PRIVATE NOTES</th><th>ACTIONS</th>' : ''}</tr></thead><tbody>${t.entries.map(e => `<tr><td><strong>${e.sessionNumber}. ${esc(e.label || 'Mentoring session')}</strong><small class="session-date">${esc(dateLabel(e.date))}</small></td><td>${hours(e.meetingMinutes)}</td><td>${hours(e.followupMinutes)}</td><td><strong>${hours(e.meetingMinutes + e.followupMinutes)}</strong></td>${admin ? `<td class="note-cell">${esc(e.note || '—')}</td><td><button class="row-action" data-edit="${esc(e.id)}">Edit</button><button class="row-action danger" data-void="${esc(e.id)}">Remove</button></td>` : ''}</tr>`).join('')}</tbody></table></div>` : `<div class="empty"><span class="empty-mark" aria-hidden="true">↗</span><div><strong>Your mentoring journey starts here.</strong><p>No sessions recorded yet. ${admin ? 'Log the first meeting when it has taken place.' : 'Your time balance will update here after each session.'}</p></div></div>`;
+  $('#history').innerHTML = t.entries.length ? `<div class="table-scroll"><table class="history-table"><thead><tr><th>SESSION / DATE</th><th>MEETING</th><th>FOLLOW-UP / PREPARATION</th><th>TOTAL</th>${admin ? '<th>PRIVATE NOTES</th><th>ACTIONS</th>' : ''}</tr></thead><tbody>${sessionSegments(t.entries,company().budgetMinutes).reverse().map(e => `<tr><td><strong>${e.number}. ${esc(e.label || 'Mentoring session')}</strong>${e.status === 'planned' ? '<span class="planned-badge">Planned · reserved</span>' : ''}<small class="session-date">${esc(dateLabel(e.date))}</small></td><td>${hours(e.meetingMinutes)}</td><td>${hours(e.followupMinutes)}</td><td><strong>${hours(e.meetingMinutes + e.followupMinutes)}</strong></td>${admin ? `<td class="note-cell">${esc(e.note || '—')}</td><td><button class="row-action" data-edit="${esc(e.id)}">Edit</button><button class="row-action danger" data-void="${esc(e.id)}">Remove</button></td>` : ''}</tr>`).join('')}</tbody></table></div>` : `<div class="empty"><span class="empty-mark" aria-hidden="true">↗</span><div><strong>Your mentoring journey starts here.</strong><p>No sessions recorded yet. ${admin ? 'Log the first meeting when it has taken place.' : 'Your time balance will update here after each session.'}</p></div></div>`;
   tick();
 }
 function tick() {
@@ -98,7 +98,8 @@ function openEntry(entry = null, stop = false) {
   form.elements.companyId.disabled = Boolean(entry || stop);
   form.elements.sessionDate.value = entry ? (entry.date || '') : (stop ? new Date(stopping.startedAt).toLocaleDateString('en-CA', {timeZone:'Europe/Bucharest'}) : today());
   form.elements.label.value = entry?.label || 'Mentoring session';
-  form.elements.sessionDate.max = today();
+  form.elements.status.value = entry?.status || 'completed';
+  form.elements.status.disabled = stop;
   form.elements.meetingMinutes.value = entry?.meetingMinutes ?? 60;
   form.elements.followupMinutes.value = entry?.followupMinutes ?? 60;
   form.elements.note.value = entry?.note || (stop ? stopping.note : '') || '';
@@ -107,7 +108,13 @@ function openEntry(entry = null, stop = false) {
   if (stop) $('#timer-recap').textContent = `Timer: ${elapsed((Date.now() + offset - new Date(stopping.startedAt).getTime()) / 1000)}. The standard charge is 60 + 60 minutes; adjust it below if needed.`;
   entryTotal(); $('#entry-dialog').showModal();
 }
-function entryTotal() { const f=$('#entry-form').elements; $('#entry-total').textContent = `${hours(Number(f.meetingMinutes.value) + Number(f.followupMinutes.value))} will be recorded`; }
+function entryTotal() {
+  const f=$('#entry-form').elements, planned=f.status.value === 'planned';
+  f.sessionDate.required=!planned;
+  if(planned) f.sessionDate.removeAttribute('max'); else f.sessionDate.max=today();
+  $('#session-date-hint').textContent=planned ? 'Leave blank until the date is confirmed.' : 'Use the date the work was completed.';
+  $('#entry-total').textContent=`${hours(Number(f.meetingMinutes.value) + Number(f.followupMinutes.value))} will be ${planned ? 'reserved, not marked as completed' : 'recorded as completed'}`;
+}
 async function mutate(body) {
   if (saving) throw new Error('A save is already in progress.');
   saving = true;
@@ -145,7 +152,7 @@ $('#entry-form').onsubmit=event=>{
   event.preventDefault(); const form=event.currentTarget;
   busy(form,async()=>{
     const f=form.elements;
-    const body={action:stopping?'stop-timer':'save-entry',id:requestId,companyId:f.companyId.value,sessionDate:f.sessionDate.value,label:f.label.value,meetingMinutes:Number(f.meetingMinutes.value),followupMinutes:Number(f.followupMinutes.value),note:f.note.value};
+    const body={action:stopping?'stop-timer':'save-entry',id:requestId,companyId:f.companyId.value,sessionDate:f.sessionDate.value,status:f.status.value,label:f.label.value,meetingMinutes:Number(f.meetingMinutes.value),followupMinutes:Number(f.followupMinutes.value),note:f.note.value};
     if (editing) body.updatedAt=editing.updatedAt;
     if (stopping) body.startedAt=stopping.startedAt;
     if (!(body.meetingMinutes+body.followupMinutes)) throw new Error('Record at least one minute.');
@@ -192,7 +199,7 @@ $('#sign-out').onclick=async()=>{
   catch(error){notice(error.message);}finally{$('#sign-out').disabled=false;}
 };
 $('#export-csv').onclick=()=>{
-  const rows=[['Company','Session number','Session','Date (Europe/Bucharest)','Meeting minutes','Follow-up minutes','Total minutes'],...totals(data.entries,selected).entries.map(e=>[company().name,e.sessionNumber,e.label,e.date || 'Date to confirm',e.meetingMinutes,e.followupMinutes,e.meetingMinutes+e.followupMinutes])];
+  const rows=[['Company','Session number','Session','Status','Date (Europe/Bucharest)','Meeting minutes','Follow-up minutes','Total minutes'],...sessionSegments(totals(data.entries,selected).entries,company().budgetMinutes).map(e=>[company().name,e.number,e.label,e.status || 'completed',e.date || 'Date to confirm',e.meetingMinutes,e.followupMinutes,e.meetingMinutes+e.followupMinutes])];
   const blob=new Blob(['\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`mentoring-${selected}-${today()}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
