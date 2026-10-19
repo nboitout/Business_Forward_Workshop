@@ -1,10 +1,10 @@
 import { createAuthClient } from '@neondatabase/auth';
-import { hours, elapsed, totals, sessionSegments, escapeHtml as esc, csvCell } from './format.js';
+import { hours, totals, sessionSegments, escapeHtml as esc, csvCell } from './format.js';
 import { setupContact } from './contact.js';
 const $ = selector => document.querySelector(selector);
 const auth = createAuthClient(`${location.origin}/api/auth`);
 const email = 'nicolas@agentic-sdlc.it';
-let data, admin = false, selected = location.hash.slice(1), offset = 0, lastSync = 0, loadId = 0, saving = false, resetMode = false, editing = null, requestId = null, stopping = null;
+let data, admin = false, selected = location.hash.slice(1), lastSync = 0, loadId = 0, saving = false, resetMode = false, editing = null, requestId = null;
 const today = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Bucharest' });
 const company = () => data?.companies.find(c => c.id === selected);
 const dateLabel = date => date ? new Intl.DateTimeFormat('en-GB', { day:'numeric', month:'short', year:'numeric', timeZone:'Europe/Bucharest' }).format(new Date(`${date}T12:00:00Z`)) : 'Date to confirm';
@@ -32,9 +32,9 @@ async function refresh(silent = false) {
   try {
     const next = await api();
     if (id !== loadId) return;
-    const changed = !data || JSON.stringify([data.companies,data.entries,data.timer,data.mentor]) !== JSON.stringify([next.companies,next.entries,next.timer,next.mentor]);
+    const changed = !data || JSON.stringify([data.companies,data.entries,data.mentor]) !== JSON.stringify([next.companies,next.entries,next.mentor]);
     data = next;
-    offset = new Date(data.serverTime).getTime() - Date.now(); lastSync = Date.now();
+    lastSync = Date.now();
     if (!data.companies.some(c => c.id === selected)) selected = data.companies[0]?.id;
     if (!silent) notice('');
     $('#sync-status').classList.remove('offline');
@@ -66,46 +66,33 @@ function render() {
     const t = totals(data.entries,c.id), remaining = c.budgetMinutes - t.committed;
     const segments = sessionSegments(t.entries,c.budgetMinutes);
     const bar = segments.map(e=>`<button class="session-segment session-color-${(e.number-1)%5} ${e.status === 'planned' ? 'is-planned' : ''}" style="width:${e.width}%" data-session="${esc(e.id)}" data-session-number="${e.number}" aria-describedby="session-tooltip" aria-label="${esc(c.name)} · ${e.status === 'planned' ? 'Planned' : 'Completed'} session ${e.number} · ${esc(e.label || 'Mentoring session')} · ${esc(dateLabel(e.date))} · ${hours(e.meetingMinutes)} meeting + ${hours(e.followupMinutes)} follow-up"><span aria-hidden="true">${e.status === 'planned' ? 'P' : e.number}</span></button>`).join('');
-    return `<article class="company-card" data-selected="${c.id === selected}"><button class="company-select" data-company="${esc(c.id)}" aria-pressed="${c.id === selected}" aria-label="View ${esc(c.name)}"><span class="card-top"><span class="monogram">${esc(initials[c.id])}</span><span class="card-arrow" aria-hidden="true">↗</span></span>${data.timer?.companyId === c.id ? '<span class="live-label">● In session</span>' : ''}<span class="company-name">${esc(c.name)}</span><span class="remaining ${remaining < 0 ? 'over' : ''}">${hours(remaining)}</span><span class="remaining-label">${remaining < 0 ? 'over budget' : 'available'}</span></button><div class="session-bar" role="group" aria-label="${esc(c.name)} session breakdown">${bar}</div><span class="card-meta"><span>${hours(t.used)} used</span><span>${hours(c.budgetMinutes)} allocated</span></span>${t.reserved ? `<small class="reserved-note">${hours(t.reserved)} reserved for planned work</small>` : ''}</article>`;
+    return `<article class="company-card" data-selected="${c.id === selected}"><button class="company-select" data-company="${esc(c.id)}" aria-pressed="${c.id === selected}" aria-label="View ${esc(c.name)}"><span class="card-top"><span class="monogram">${esc(initials[c.id])}</span><span class="card-arrow" aria-hidden="true">↗</span></span><span class="company-name">${esc(c.name)}</span><span class="remaining ${remaining < 0 ? 'over' : ''}">${hours(remaining)}</span><span class="remaining-label">${remaining < 0 ? 'over budget' : 'available'}</span></button><div class="session-bar" role="group" aria-label="${esc(c.name)} session breakdown">${bar}</div><span class="card-meta"><span>${hours(t.used)} used</span><span>${hours(c.budgetMinutes)} allocated</span></span>${t.reserved ? `<small class="reserved-note">${hours(t.reserved)} reserved for planned work</small>` : ''}</article>`;
   }).join('');
   if (!company()) return;
   $('#company-detail').hidden = false;
   $('#detail-heading').textContent = company().name;
   const t = totals(data.entries,selected), remaining = company().budgetMinutes - t.committed;
   $('#detail-stats').innerHTML = `<div class="stat"><span>Time allocated</span><strong>${hours(company().budgetMinutes)}</strong><small>Total budget through 15 November 2026</small></div><div class="stat"><span>Time completed</span><strong>${hours(t.used)}</strong><small>${hours(t.meeting)} meetings + ${hours(t.followup)} follow-up / preparation</small></div><div class="stat"><span>Time reserved</span><strong>${hours(t.reserved)}</strong><small>Planned work · already deducted from available time</small></div><div class="stat"><span>${remaining < 0 ? 'Over budget' : 'Time available'}</span><strong class="${remaining < 0 ? 'over' : ''}">${hours(remaining)}</strong><small>${remaining < 0 ? 'Discuss the additional time with Nicolas' : 'Allocation minus completed and reserved time'}</small></div>`;
-  const active = data.timer?.companyId === selected;
-  $('#active-timer').hidden = !active;
-  if (active) $('#active-timer').innerHTML = `<div><strong id="elapsed-time"></strong><span>Meeting in progress</span><p>Not charged yet. Meeting and follow-up time are recorded when Nicolas saves the session.</p></div>${admin ? '<button id="stop-timer" class="button primary">■ Finish & record</button>' : ''}`;
-  $('#start-timer').disabled = Boolean(data.timer);
-  $('#start-timer').title = data.timer ? 'One timer can run at a time.' : '';
-  if (admin && data.timer && !active) {
-    $('#active-timer').hidden = false;
-    $('#active-timer').innerHTML = `<div>A timer is running for <b>${esc(data.companies.find(c => c.id === data.timer.companyId)?.name)}</b>.</div><button class="text-button" data-company="${esc(data.timer.companyId)}">Open active session →</button>`;
-  }
   $('#export-csv').disabled = !t.entries.length;
   $('#history').innerHTML = t.entries.length ? `<div class="table-scroll"><table class="history-table"><thead><tr><th>SESSION / DATE</th><th>MEETING</th><th>FOLLOW-UP / PREPARATION</th><th>TOTAL</th>${admin ? '<th>PRIVATE NOTES</th><th>ACTIONS</th>' : ''}</tr></thead><tbody>${sessionSegments(t.entries,company().budgetMinutes).reverse().map(e => `<tr><td><strong>${e.number}. ${esc(e.label || 'Mentoring session')}</strong>${e.status === 'planned' ? '<span class="planned-badge">Planned · reserved</span>' : ''}<small class="session-date">${esc(dateLabel(e.date))}</small></td><td>${hours(e.meetingMinutes)}</td><td>${hours(e.followupMinutes)}</td><td><strong>${hours(e.meetingMinutes + e.followupMinutes)}</strong></td>${admin ? `<td class="note-cell">${esc(e.note || '—')}</td><td><button class="row-action" data-edit="${esc(e.id)}">Edit</button><button class="row-action danger" data-void="${esc(e.id)}">Remove</button></td>` : ''}</tr>`).join('')}</tbody></table></div>` : `<div class="empty"><span class="empty-mark" aria-hidden="true">↗</span><div><strong>Your mentoring journey starts here.</strong><p>No sessions recorded yet. ${admin ? 'Log the first meeting when it has taken place.' : 'Your time balance will update here after each session.'}</p></div></div>`;
-  tick();
+  updateSyncStatus();
 }
-function tick() {
-  if ($('#elapsed-time') && data?.timer) $('#elapsed-time').textContent = elapsed((Date.now() + offset - new Date(data.timer.startedAt).getTime()) / 1000);
+function updateSyncStatus() {
   if (lastSync && Date.now() - lastSync > 45000 && !$('#sync-status').classList.contains('offline')) { $('#sync-status').textContent = 'Waiting for connection · last saved data'; $('#sync-status').classList.add('offline'); }
 }
-function openEntry(entry = null, stop = false) {
-  editing = entry; stopping = stop ? { ...data.timer } : null; requestId = entry?.id || crypto.randomUUID();
+function openEntry(entry = null) {
+  editing = entry; requestId = entry?.id || crypto.randomUUID();
   const form = $('#entry-form'); form.reset(); $('#entry-error').textContent = '';
   form.elements.companyId.innerHTML = data.companies.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   form.elements.companyId.value = entry?.companyId || selected;
-  form.elements.companyId.disabled = Boolean(entry || stop);
-  form.elements.sessionDate.value = entry ? (entry.date || '') : (stop ? new Date(stopping.startedAt).toLocaleDateString('en-CA', {timeZone:'Europe/Bucharest'}) : today());
+  form.elements.companyId.disabled = Boolean(entry);
+  form.elements.sessionDate.value = entry ? (entry.date || '') : today();
   form.elements.label.value = entry?.label || 'Mentoring session';
   form.elements.status.value = entry?.status || 'completed';
-  form.elements.status.disabled = stop;
   form.elements.meetingMinutes.value = entry?.meetingMinutes ?? 60;
   form.elements.followupMinutes.value = entry?.followupMinutes ?? 60;
-  form.elements.note.value = entry?.note || (stop ? stopping.note : '') || '';
-  $('#entry-title').textContent = entry ? 'Edit session' : stop ? 'Finish & record session' : 'Log a meeting';
-  $('#timer-recap').hidden = !stop;
-  if (stop) $('#timer-recap').textContent = `Timer: ${elapsed((Date.now() + offset - new Date(stopping.startedAt).getTime()) / 1000)}. The standard charge is 60 + 60 minutes; adjust it below if needed.`;
+  form.elements.note.value = entry?.note || '';
+  $('#entry-title').textContent = entry ? 'Edit session' : 'Log a meeting';
   entryTotal(); $('#entry-dialog').showModal();
 }
 function entryTotal() {
@@ -142,7 +129,6 @@ document.addEventListener('click', async event => {
     remove.disabled=true;
     try { await mutate({action:'void-entry',id:entry.id,updatedAt:entry.updatedAt}); notice('Session removed. The time balance has been updated.'); } catch(error) { notice(error.message); remove.disabled=false; }
   }
-  if (event.target.closest('#stop-timer')) openEntry(null,true);
   if (event.target.closest('#retry')) refresh();
 });
 $('#mentor-access').onclick=()=>{$('#login-dialog').showModal();};
@@ -152,17 +138,11 @@ $('#entry-form').onsubmit=event=>{
   event.preventDefault(); const form=event.currentTarget;
   busy(form,async()=>{
     const f=form.elements;
-    const body={action:stopping?'stop-timer':'save-entry',id:requestId,companyId:f.companyId.value,sessionDate:f.sessionDate.value,status:f.status.value,label:f.label.value,meetingMinutes:Number(f.meetingMinutes.value),followupMinutes:Number(f.followupMinutes.value),note:f.note.value};
+    const body={action:'save-entry',id:requestId,companyId:f.companyId.value,sessionDate:f.sessionDate.value,status:f.status.value,label:f.label.value,meetingMinutes:Number(f.meetingMinutes.value),followupMinutes:Number(f.followupMinutes.value),note:f.note.value};
     if (editing) body.updatedAt=editing.updatedAt;
-    if (stopping) body.startedAt=stopping.startedAt;
     if (!(body.meetingMinutes+body.followupMinutes)) throw new Error('Record at least one minute.');
     await mutate(body); $('#entry-dialog').close(); notice('Session saved. The public time balance has been updated.');
   },'#entry-error');
-};
-$('#start-timer').onclick=async()=>{
-  $('#start-timer').disabled=true;
-  try { await mutate({action:'start-timer',companyId:selected}); notice('Timer started. You can close this page; the timer will keep running.'); }
-  catch(error) { notice(error.message); $('#start-timer').disabled=false; }
 };
 $('#edit-budget').onclick=()=>{ $('#budget-form').elements.hours.value=company().budgetMinutes/60; $('#budget-title').textContent=`Budget · ${company().name}`; $('#budget-error').textContent=''; $('#budget-dialog').showModal(); };
 $('#budget-form').onsubmit=event=>{event.preventDefault();const f=event.currentTarget;busy(f,async()=>{await mutate({action:'budget',companyId:selected,budgetMinutes:Number(f.elements.hours.value)*60});$('#budget-dialog').close();notice('Time budget updated.');},'#budget-error');};
@@ -213,6 +193,6 @@ window.addEventListener('resize',hideSessionTip);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(true);});
 window.addEventListener('online',()=>refresh(true));
 setupContact();
-setInterval(()=>{if(!document.hidden)refresh(true);},20000);setInterval(tick,1000);
+setInterval(()=>{if(!document.hidden)refresh(true);},20000);setInterval(updateSyncStatus,1000);
 await refresh();
 try { const result=await auth.getSession();if(result.data?.user){await api(null,true);admin=true;await refresh();} } catch { /* Public access remains available when signed out. */ }
